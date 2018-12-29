@@ -41,6 +41,7 @@ default-features = false
 [dependencies.arrayvec]
 version = "0.4"
 default-features = false
+path = "../arrayvec-0.4.8"
 
 [dependencies.crossbeam-deque]
 version = "0.6"
@@ -67,6 +68,8 @@ optional = true
 
 [dependencies.stb_truetype]
 version = "0.2.2"
+path = "../stb_truetype-0.2.2"
+
 [dev-dependencies.blake2]
 version = "0.8"
 

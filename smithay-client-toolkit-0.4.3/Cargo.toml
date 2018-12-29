@@ -20,14 +20,18 @@ keywords = ["wayland", "client"]
 categories = ["gui"]
 license = "MIT"
 repository = "https://github.com/smithay/client-toolkit"
+
 [dependencies.andrew]
-version = "0.1.2"
+version = "0.1.4"
+path = "../andrew-0.1.4"
 
 [dependencies.bitflags]
-version = "1.0"
+version = "1.0.4"
+path = "../bitflags-1.0.4"
 
 [dependencies.dlib]
 version = "0.4"
+path = "../dlib-0.4.1"
 
 [dependencies.lazy_static]
 version = "1"
@@ -60,5 +64,6 @@ version = "0.20"
 [dev-dependencies.wayland-client]
 version = "0.21"
 features = ["dlopen"]
+
 [badges.travis-ci]
 repository = "smithay/client-toolkit"

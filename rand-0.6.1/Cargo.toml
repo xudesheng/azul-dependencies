@@ -37,24 +37,32 @@ optional = true
 
 [dependencies.rand_chacha]
 version = "0.1"
+path = "../rand_chacha-0.1.0"
 
 [dependencies.rand_core]
 version = "0.3"
 default-features = false
+path = "../rand_core-0.3.0"
 
 [dependencies.rand_hc]
 version = "0.1"
+path = "../rand_hc-0.1.0"
 
 [dependencies.rand_isaac]
 version = "0.1"
+path = "../rand_isaac-0.1.1"
 
 [dependencies.rand_pcg]
 version = "0.1"
+path = "../rand_pcg-0.1.1"
 
 [dependencies.rand_xorshift]
 version = "0.1"
+path = "../rand_xorshift-0.1.0"
+
 [dev-dependencies.average]
 version = "0.9.2"
+
 [build-dependencies.rustc_version]
 version = "0.2"
 

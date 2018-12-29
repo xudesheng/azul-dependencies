@@ -20,5 +20,7 @@ readme = "README.md"
 keywords = ["adler32", "hash", "rolling"]
 license = "BSD-3-Clause AND Zlib"
 repository = "https://github.com/remram44/adler32-rs"
+
 [dev-dependencies.rand]
-version = "0.4"
+version = "0.6.1"
+path = "../rand-0.6.1"
