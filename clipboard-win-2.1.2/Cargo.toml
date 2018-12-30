@@ -32,7 +32,8 @@ test = false
 [features]
 utf16error = []
 [target."cfg(windows)".dependencies.winapi]
-version = "0.3"
+version = "0.3.6"
+path = "../winapi-0.3.6"
 features = ["basetsd", "winbase", "winuser"]
 default-features = false
 [badges.appveyor]

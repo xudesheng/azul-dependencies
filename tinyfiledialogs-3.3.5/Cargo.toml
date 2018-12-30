@@ -23,7 +23,11 @@ repository = "https://github.com/jdm/tinyfiledialogs-rs"
 
 [lib]
 name = "tinyfiledialogs"
+
 [dependencies.libc]
-version = "0.2.0"
+version = "0.2.45"
+path = "../libc-0.2.45"
+
 [build-dependencies.cc]
-version = "1"
+version = "1.0.26"
+path = "../cc-1.0.26"

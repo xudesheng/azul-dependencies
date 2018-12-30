@@ -25,55 +25,14 @@ repository = "https://github.com/daboross/fern"
 [package.metadata.docs.rs]
 all-features = true
 
-[[example]]
-name = "cmd-program"
-
-[[example]]
-name = "colored"
-required-features = ["colored"]
-
-[[example]]
-name = "pretty-colored"
-required-features = ["colored"]
-
-[[example]]
-name = "syslog"
-required-features = ["syslog-4"]
-
-[[example]]
-name = "syslog3"
-required-features = ["syslog-3"]
-
-[[example]]
-name = "meta-logging"
-[dependencies.colored]
-version = "1.5"
-optional = true
-
 [dependencies.log]
-version = "0.4"
+version = "0.4.6"
 features = ["std"]
-
-[dependencies.syslog]
-version = "4"
-optional = true
-
-[dependencies.syslog3]
-version = "3"
-optional = true
-[dev-dependencies.chrono]
-version = "0.4"
-
-[dev-dependencies.clap]
-version = "2.22"
-
-[dev-dependencies.tempdir]
-version = "0.3"
+path = "../log-0.4.6"
 
 [features]
 meta-logging-in-format = []
-syslog-3 = ["syslog3"]
-syslog-4 = ["syslog"]
+
 [badges.appveyor]
 repository = "daboross/fern"
 
