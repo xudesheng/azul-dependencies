@@ -2,7 +2,7 @@
 
 [workspace]
 members = [
-    "azul_glium-0.22.0",
+    "glium-0.22.0",
     "gleam-0.6.8",
     "euclid-0.19.4",
     "rusttype-0.7.3",

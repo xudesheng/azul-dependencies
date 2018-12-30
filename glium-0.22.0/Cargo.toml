@@ -11,7 +11,7 @@
 # will likely look very different (and much more reasonable)
 
 [package]
-name = "azul_glium"
+name = "glium"
 version = "0.22.0"
 authors = ["Pierre Krieger <pierre.krieger1708@gmail.com>"]
 build = "build/main.rs"
@@ -23,19 +23,25 @@ keywords = ["opengl", "gamedev"]
 categories = ["api-bindings", "rendering::graphics-api"]
 license = "Apache-2.0"
 repository = "https://github.com/glium/glium"
+
 [dependencies.fnv]
-version = "1.0.5"
+version = "1.0.6"
+path = "../fnv-1.0.6"
 
 [dependencies.glutin]
-version = "0.19"
+version = "0.19.0"
+path = "../glutin-0.19.0"
 features = []
 optional = true
 
 [dependencies.lazy_static]
-version = "1.0"
+version = "1.2.0"
+path = "../lazy_static-1.2.0"
 
 [dependencies.smallvec]
-version = "0.6"
+version = "0.6.7"
+path = "../smallvec-0.6.7"
+
 [dev-dependencies.cgmath]
 version = "0.16"
 
@@ -50,9 +56,12 @@ version = "0.8"
 features = ["genmesh"]
 
 [dev-dependencies.rand]
-version = "0.4"
+version = "0.5.5"
+path = "../rand-0.5.5"
+
 [build-dependencies.gl_generator]
-version = "0.9"
+version = "0.10.0"
+path = "../gl_generator-0.10.0"
 
 [features]
 default = ["glutin"]

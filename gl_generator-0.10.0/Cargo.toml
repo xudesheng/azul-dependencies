@@ -26,14 +26,18 @@ repository = "https://github.com/brendanzab/gl-rs/"
 [lib]
 name = "gl_generator"
 path = "lib.rs"
+
 [dependencies.khronos_api]
 version = "3.0.0"
+path = "../khronos_api-3.0.0"
 
 [dependencies.log]
-version = "0.4"
+version = "0.4.6"
+path = "../log-0.4.6"
 
 [dependencies.xml-rs]
-version = "0.8"
+version = "0.8.0"
+path = "../xml-rs-0.8.0"
 
 [features]
 unstable_generator_utils = []

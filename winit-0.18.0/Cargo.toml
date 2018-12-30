@@ -21,58 +21,82 @@ keywords = ["windowing"]
 categories = ["gui"]
 license = "Apache-2.0"
 repository = "https://github.com/tomaka/winit"
+
 [package.metadata.docs.rs]
 features = ["icon_loading", "serde"]
+
 [dependencies.image]
 version = "0.20.1"
 optional = true
+path = "../image-0.20.1"
 
 [dependencies.lazy_static]
-version = "1"
+version = "1.2.0"
+path = "../lazy_static-1.2.0"
 
 [dependencies.libc]
-version = "0.2"
+version = "0.2.45"
+path = "../libc-0.2.45"
 
 [dependencies.log]
-version = "0.4"
+version = "0.4.6"
+path = "../log-0.4.6"
 
 [dependencies.serde]
-version = "1"
+version = "1.0.80"
+path = "../serde-1.0.80"
 features = ["serde_derive"]
 optional = true
 
 [features]
 icon_loading = ["image"]
+
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies.parking_lot]
-version = "0.6"
+version = "0.6.4"
+path = "../parking_lot-0.6.4"
 
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies.percent-encoding]
-version = "1.0"
+version = "1.0.1"
+path = "../percent-encoding-1.0.1"
 
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies.smithay-client-toolkit]
-version = "0.4"
+version = "0.4.3"
+path = "../smithay-client-toolkit-0.4.3"
 
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies.wayland-client]
-version = "0.21"
+version = "0.21.7"
+path = "../wayland-client-0.21.7"
 features = ["dlopen", "egl", "cursor"]
 
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies.x11-dl]
 version = "2.18.3"
+path = "../x11-dl-2.18.3"
+
 [target."cfg(target_os = \"android\")".dependencies.android_glue]
-version = "0.2"
-[target."cfg(target_os = \"ios\")".dependencies.objc]
 version = "0.2.3"
+path = "../android_glue-0.2.3"
+
+[target."cfg(target_os = \"ios\")".dependencies.objc]
+version = "0.2.5"
+path = "../objc-0.2.5"
+
 [target."cfg(target_os = \"macos\")".dependencies.cocoa]
 version = "0.18.4"
+path = "../cocoa-0.18.4"
 
 [target."cfg(target_os = \"macos\")".dependencies.core-foundation]
 version = "0.6"
+path = "../core-foundation-0.6.3"
 
 [target."cfg(target_os = \"macos\")".dependencies.core-graphics]
 version = "0.17.3"
+path = "../core-graphics-0.17.3"
 
 [target."cfg(target_os = \"macos\")".dependencies.objc]
-version = "0.2.3"
+version = "0.2.5"
+path = "../objc-0.2.5"
+
 [target."cfg(target_os = \"windows\")".dependencies.winapi]
 version = "0.3.6"
+path = "../winapi-0.3.6"
 features = ["combaseapi", "dwmapi", "errhandlingapi", "hidusage", "libloaderapi", "objbase", "ole2", "processthreadsapi", "shellapi", "shellscalingapi", "shobjidl_core", "unknwnbase", "winbase", "windowsx", "winerror", "wingdi", "winnt", "winuser"]

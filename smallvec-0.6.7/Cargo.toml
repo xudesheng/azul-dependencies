@@ -25,14 +25,19 @@ repository = "https://github.com/servo/rust-smallvec"
 [lib]
 name = "smallvec"
 path = "lib.rs"
+
 [dependencies.serde]
-version = "1"
+version = "1.0.80"
 optional = true
+path = "../serde-1.0.80"
 
 [dependencies.unreachable]
 version = "1.0.0"
+path = "../unreachable-1.0.0"
+
 [dev-dependencies.bincode]
 version = "1.0.1"
+path = "../bincode-1.0.1"
 
 [features]
 default = ["std"]

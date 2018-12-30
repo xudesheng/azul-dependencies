@@ -28,13 +28,17 @@ features = ["std", "serde"]
 [[test]]
 name = "filters"
 harness = false
+
 [dependencies.cfg-if]
-version = "0.1.2"
+version = "0.1.6"
+path = "../cfg-if-0.1.6"
 
 [dependencies.serde]
-version = "1.0"
+version = "1.0.80"
+path = "../serde-1.0.80"
 optional = true
 default-features = false
+
 [dev-dependencies.serde_test]
 version = "1.0"
 
