@@ -23,16 +23,22 @@ keywords = ["binary", "encode", "decode", "serialize", "deserialize"]
 categories = ["network-programming"]
 license = "MIT"
 repository = "https://github.com/TyOverby/bincode"
+
 [dependencies.byteorder]
-version = "1.2.0"
+version = "1.2.7"
+path = "../byteorder-1.2.7"
 
 [dependencies.serde]
-version = "^1.0.63"
+version = "1.0.80"
+path = "../serde-1.0.80"
+
 [dev-dependencies.serde_bytes]
-version = "^0.10.3"
+version = "0.10.4"
+path = "../serde_bytes-0.10.4"
 
 [dev-dependencies.serde_derive]
-version = "^1.0.27"
+version = "1.0.80"
+path = "../serde_derive-1.0.80"
 
 [features]
 i128 = ["byteorder/i128"]

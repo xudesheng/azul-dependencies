@@ -20,7 +20,11 @@ homepage = "https://github.com/alexcrichton/backtrace-rs"
 documentation = "http://alexcrichton.com/backtrace-rs"
 license = "MIT/Apache-2.0"
 repository = "https://github.com/alexcrichton/backtrace-rs"
+
 [dependencies.libc]
-version = "0.2"
+version = "0.2.45"
+path = "../libc-0.2.45"
+
 [build-dependencies.cc]
-version = "1.0"
+version = "1.0.26"
+path = "../cc-1.0.26"

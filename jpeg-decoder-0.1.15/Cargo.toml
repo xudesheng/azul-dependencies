@@ -21,12 +21,16 @@ readme = "README.md"
 keywords = ["jpeg", "jpg", "decoder", "image"]
 license = "MIT / Apache-2.0"
 repository = "https://github.com/kaksmet/jpeg-decoder"
+
 [dependencies.byteorder]
-version = "1.0"
+version = "1.2.7"
+path = "../byteorder-1.2.7"
 
 [dependencies.rayon]
-version = "1.0"
+version = "1.0.3"
+path = "../rayon-1.0.3"
 optional = true
+
 [dev-dependencies.docopt]
 version = "0.7"
 

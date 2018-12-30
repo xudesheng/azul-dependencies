@@ -18,15 +18,18 @@ description = "Bindings to Core Foundation for OS X"
 homepage = "https://github.com/servo/core-foundation-rs"
 license = "MIT / Apache-2.0"
 repository = "https://github.com/servo/core-foundation-rs"
+
 [dependencies.chrono]
 version = "0.4"
 optional = true
 
 [dependencies.core-foundation-sys]
 version = "0.6.1"
+path = "../core-foundation-sys-0.6.2"
 
 [dependencies.libc]
-version = "0.2"
+version = "0.2.45"
+path = "../libc-0.2.45"
 
 [dependencies.uuid]
 version = "0.5"

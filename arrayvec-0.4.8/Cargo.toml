@@ -33,14 +33,18 @@ harness = false
 [[bench]]
 name = "arraystring"
 harness = false
+
 [dependencies.nodrop]
-version = "0.1.12"
+version = "0.1.13"
 default-features = false
+path = "../nodrop-0.1.13"
 
 [dependencies.serde]
-version = "1.0"
+version = "1.0.80"
 optional = true
 default-features = false
+path = "../serde-1.0.80"
+
 [dev-dependencies.bencher]
 version = "0.1.4"
 

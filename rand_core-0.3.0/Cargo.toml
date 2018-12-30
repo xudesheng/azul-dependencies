@@ -22,12 +22,15 @@ keywords = ["random", "rng"]
 categories = ["algorithms", "no-std"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/rust-random/rand"
+
 [dependencies.serde]
-version = "1"
+version = "1.0.80"
+path = "../serde-1.0.80"
 optional = true
 
 [dependencies.serde_derive]
-version = "^1.0.38"
+version = "1.0.80"
+path = "../serde_derive-1.0.80"
 optional = true
 
 [features]
@@ -35,6 +38,7 @@ alloc = []
 default = ["std"]
 serde1 = ["serde", "serde_derive"]
 std = ["alloc"]
+
 [badges.appveyor]
 repository = "dhardy/rand"
 

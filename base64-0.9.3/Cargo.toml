@@ -23,10 +23,15 @@ license = "MIT/Apache-2.0"
 repository = "https://github.com/alicemaz/rust-base64"
 [profile.bench]
 debug = true
+
 [dependencies.byteorder]
-version = "1.1.0"
+version = "1.2.7"
+path = "../byteorder-1.2.7"
 
 [dependencies.safemem]
 version = "0.3"
+path = "../safemem-0.3.0"
+
 [dev-dependencies.rand]
-version = "0.4"
+version = "0.5.5"
+path = "../rand-0.5.5"

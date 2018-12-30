@@ -19,10 +19,15 @@ description = "X11 library bindings for Rust"
 documentation = "https://docs.rs/x11-dl"
 license = "CC0-1.0"
 repository = "https://github.com/erlepereira/x11-rs.git"
+
 [dependencies.lazy_static]
-version = "1"
+version = "1.2.0"
+path = "../lazy_static-1.2.0"
 
 [dependencies.libc]
-version = "0.2"
+version = "0.2.45"
+path = "../libc-0.2.45"
+
 [build-dependencies.pkg-config]
-version = "0.3.8"
+version = "0.3.14"
+path = "../pkg-config-0.3.14"

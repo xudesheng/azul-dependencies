@@ -31,8 +31,9 @@ version = "0.2.0"
 optional = true
 
 [dependencies.num-traits]
-version = "0.2.0"
+version = "0.2.6"
 default_features = false
+path = "../num-traits-0.2.6"
 
 [features]
 default = ["std"]

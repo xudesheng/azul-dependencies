@@ -18,13 +18,16 @@ description = "Servo app units type (Au)"
 documentation = "https://docs.rs/app_units/"
 license = "MPL-2.0"
 repository = "https://github.com/servo/app_units"
+
 [dependencies.num-traits]
-version = "0.2"
+version = "0.2.6"
 optional = true
+path = "../num-traits-0.2.6"
 
 [dependencies.serde]
-version = "1.0"
+version = "1.0.80"
 optional = true
+path = "../serde-1.0.80"
 
 [features]
 default = ["num_traits", "serde_serialization"]

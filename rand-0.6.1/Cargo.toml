@@ -24,8 +24,10 @@ keywords = ["random", "rng"]
 categories = ["algorithms", "no-std"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/rust-random/rand"
+
 [package.metadata.docs.rs]
 all-features = true
+
 [dependencies.log]
 version = "0.4"
 optional = true
@@ -73,28 +75,20 @@ i128_support = []
 nightly = ["simd_support"]
 serde1 = ["rand_core/serde1", "rand_isaac/serde1", "rand_xorshift/serde1"]
 simd_support = ["packed_simd"]
-std = ["rand_core/std", "alloc", "libc", "winapi", "cloudabi", "fuchsia-zircon"]
-[target."cfg(target_os = \"cloudabi\")".dependencies.cloudabi]
-version = "0.0.3"
-optional = true
-[target."cfg(target_os = \"fuchsia\")".dependencies.fuchsia-zircon]
-version = "0.3.2"
-optional = true
+std = ["rand_core/std", "alloc", "libc", "winapi"]
+
 [target."cfg(unix)".dependencies.libc]
-version = "0.2"
+version = "0.2.45"
 optional = true
 default-features = false
+path = "../libc-0.2.45"
+
 [target."cfg(windows)".dependencies.winapi]
-version = "0.3"
+version = "0.3.6"
+path = "../winapi-0.3.6"
 features = ["minwindef", "ntsecapi", "profileapi", "winnt"]
 optional = true
-[target.wasm32-unknown-unknown.dependencies.stdweb]
-version = "0.4"
-optional = true
 
-[target.wasm32-unknown-unknown.dependencies.wasm-bindgen]
-version = "0.2.12"
-optional = true
 [badges.appveyor]
 repository = "rust-random/rand"
 
