@@ -34,9 +34,11 @@ name = "image"
 
 [[example]]
 name = "simple"
+
 [dependencies.approx]
-version = "0.3"
+version = "0.3.1"
 default-features = false
+path = "../approx-0.3.1"
 
 [dependencies.arrayvec]
 version = "0.4"
@@ -60,7 +62,8 @@ version = "1.0"
 optional = true
 
 [dependencies.ordered-float]
-version = "1"
+version = "1.0.1"
+path = "../ordered-float-1.0.1"
 
 [dependencies.rustc-hash]
 version = "1"

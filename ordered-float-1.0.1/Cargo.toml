@@ -20,15 +20,16 @@ keywords = ["no_std", "ord", "f64", "f32", "sort"]
 categories = ["science", "rust-patterns", "no-std"]
 license = "MIT"
 repository = "https://github.com/reem/rust-ordered-float"
+
 [dependencies.num-traits]
-version = "0.2"
+version = "0.2.6"
+path = "../num-traits-0.2.6"
 
 [dependencies.serde]
-version = "1.0"
+version = "1.0.80"
+path = "../serde-1.0.80"
 optional = true
 default-features = false
-[dev-dependencies.serde_test]
-version = "1.0"
 
 [features]
 default = ["std"]

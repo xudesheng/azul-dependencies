@@ -20,5 +20,7 @@ readme = "README.md"
 keywords = ["font", "truetype", "opentype", "ttf", "otf"]
 license = "MIT / Apache-2.0"
 repository = "https://github.com/redox-os/stb_truetype-rs"
+
 [dependencies.byteorder]
-version = "1.0"
+version = "1.2.7"
+path = "../byteorder-1.2.7"
