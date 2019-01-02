@@ -22,8 +22,10 @@ keywords = ["scoped", "thread", "atomic", "cache"]
 categories = ["algorithms", "concurrency", "data-structures"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/crossbeam-rs/crossbeam-utils"
+
 [dependencies.cfg-if]
-version = "0.1"
+version = "0.1.6"
+path = "../cfg-if-0.1.6"
 
 [features]
 default = ["use_std"]

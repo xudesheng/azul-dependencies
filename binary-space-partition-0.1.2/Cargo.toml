@@ -11,5 +11,4 @@ documentation = "https://docs.rs/binary-space-partition"
 [dependencies]
 
 [dev-dependencies]
-rand = "0.5.5"
-path = "../rand-0.5.5"
+rand = { version = "0.5.5", path = "../rand-0.5.5" }

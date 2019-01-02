@@ -24,11 +24,15 @@ keywords = ["serde", "serialization", "no_std"]
 categories = ["encoding"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/serde-rs/serde"
+
 [dependencies.serde_derive]
-version = "1.0"
+version = "1.0.80"
+path = "../serde_derive-1.0.80"
 optional = true
+
 [dev-dependencies.serde_derive]
-version = "1.0"
+version = "1.0.80"
+path = "../serde_derive-1.0.80"
 
 [features]
 alloc = ["unstable"]

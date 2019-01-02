@@ -5,14 +5,10 @@
 #![allow(non_upper_case_globals)]
 
 #[macro_use]
-extern crate serde_derive;
-
-#[macro_use]
 extern crate lazy_static;
 #[macro_use(DEFINE_GUID)]
 extern crate winapi;
 extern crate libc;
-extern crate serde;
 
 include!("types.rs");
 

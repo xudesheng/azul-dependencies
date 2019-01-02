@@ -20,26 +20,22 @@ keywords = ["crypto", "sha2", "hash", "digest"]
 categories = ["cryptography", "no-std"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/RustCrypto/hashes"
+
 [dependencies.block-buffer]
-version = "0.3"
+version = "0.3.3"
+path = "../block-buffer-0.3.3"
 
 [dependencies.byte-tools]
-version = "0.2"
+version = "0.2.0"
+path = "../byte-tools-0.2.0"
 
 [dependencies.digest]
-version = "0.7"
+version = "0.7.6"
+path = "../digest-0.7.6"
 
 [dependencies.fake-simd]
-version = "0.1"
+version = "0.1.2"
+path = "../fake-simd-0.1.2"
 
-[dependencies.sha2-asm]
-version = "0.5"
-optional = true
-[dev-dependencies.digest]
-version = "^0.7.1"
-features = ["dev"]
-
-[features]
-asm = ["sha2-asm"]
 [badges.travis-ci]
 repository = "RustCrypto/hashes"

@@ -21,20 +21,31 @@ readme = "Readme.md"
 keywords = ["font", "loading", "loader", "wingdi", "fontconfig"]
 license = "MIT"
 repository = "https://github.com/MSleepyPanda/rust-font-loader"
+
 [dependencies.libc]
-version = "0.2.15"
+version = "0.2.45"
+path = "../libc-0.2.45"
+
 [target."cfg(all(unix, not(target_os = \"macos\")))".dependencies.servo-fontconfig]
 version = "0.4.0"
+path = "../servo-fontconfig-0.4.0"
+
 [target."cfg(target_os = \"macos\")".dependencies.core-foundation]
-version = "0.6"
+version = "0.6.3"
+path = "../core-foundation-0.6.3"
 
 [target."cfg(target_os = \"macos\")".dependencies.core-text]
 version = "10.0"
-[target."cfg(windows)".dependencies.gdi32-sys]
+path = "../core-text-10.0.0"
+
+[target."cfg(target_os = \"windows\")".dependencies.gdi32-sys]
 version = "0.2.0"
+path = "../gdi32-sys-0.2.0"
 
-[target."cfg(windows)".dependencies.user32-sys]
-version = "0.2"
+[target."cfg(target_os = \"windows\")".dependencies.user32-sys]
+version = "0.2.0"
+path = "../user32-sys-0.2.0"
 
-[target."cfg(windows)".dependencies.winapi]
-version = "0.2"
+[target."cfg(target_os = \"windows\")".dependencies.winapi]
+version = "0.2.8"
+path = "../winapi-0.2.8"

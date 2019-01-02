@@ -22,33 +22,39 @@ keywords = ["lock-free", "rcu", "atomic", "garbage"]
 categories = ["concurrency", "memory-management"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/crossbeam-rs/crossbeam-epoch"
+
 [dependencies.arrayvec]
-version = "0.4"
+version = "0.4.8"
 default-features = false
+path = "../arrayvec-0.4.8"
 
 [dependencies.cfg-if]
-version = "0.1"
+version = "0.1.6"
+path = "../cfg-if-0.1.6"
 
 [dependencies.crossbeam-utils]
-version = "0.2"
+version = "0.2.2"
 default-features = false
+path = "../crossbeam-utils-0.2.2"
 
 [dependencies.lazy_static]
-version = "1.0.0"
+version = "1.2.0"
 optional = true
+path = "../lazy_static-1.2.0"
 
 [dependencies.memoffset]
-version = "0.2"
+version = "0.2.1"
+path = "../memoffset-0.2.1"
 
 [dependencies.nodrop]
 version = "0.1.12"
 default-features = false
+path = "../nodrop-0.1.13"
 
 [dependencies.scopeguard]
-version = "0.3"
+version = "0.3.3"
 default-features = false
-[dev-dependencies.rand]
-version = "0.3"
+path = "../scopeguard-0.3.3"
 
 [features]
 default = ["use_std"]

@@ -34,25 +34,21 @@ name = "syn"
 name = "dump-syntax"
 path = "examples/dump-syntax/main.rs"
 required-features = ["full", "parsing", "extra-traits"]
+
 [dependencies.proc-macro2]
-version = "0.4.4"
+version = "0.4.24"
 default-features = false
+path = "../proc-macro2-0.4.24"
 
 [dependencies.quote]
-version = "0.6"
+version = "0.6.10"
 optional = true
 default-features = false
+path = "../quote-0.6.10"
 
 [dependencies.unicode-xid]
-version = "0.1"
-[dev-dependencies.rayon]
-version = "1.0"
-
-[dev-dependencies.regex]
-version = "1.0"
-
-[dev-dependencies.walkdir]
-version = "2.1"
+version = "0.1.0"
+path = "../unicode-xid-0.1.0"
 
 [features]
 clone-impls = []

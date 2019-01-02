@@ -20,18 +20,12 @@ repository = "https://github.com/servo/dwrote-rs"
 
 [lib]
 name = "dwrote"
-[dependencies.lazy_static]
-version = "1"
 
-[dependencies.libc]
-version = "0.2"
-
-[dependencies.serde]
-version = "1.0"
-
-[dependencies.serde_derive]
-version = "1.0"
+[dependencies]
+lazy_static = { version = "1.2.0", path = "../lazy_static-1.2.0" }
+libc = { version = "0.2.45", path = "../libc-0.2.45" }
 
 [dependencies.winapi]
 version = "0.3.6"
+path = "../winapi-0.3.6"
 features = ["dwrite", "dwrite_1", "dwrite_3", "winnt", "unknwnbase", "libloaderapi", "winnls"]

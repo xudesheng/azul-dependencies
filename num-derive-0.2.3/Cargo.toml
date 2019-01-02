@@ -28,19 +28,22 @@ repository = "https://github.com/rust-num/num-derive"
 name = "num_derive"
 test = false
 proc-macro = true
+
 [dependencies.num-traits]
-version = "0.2"
+version = "0.2.6"
+path = "../num-traits-0.2.6"
 
 [dependencies.proc-macro2]
-version = "0.4.2"
+version = "0.4.24"
+path = "../proc-macro2-0.4.24"
 
 [dependencies.quote]
-version = "0.6"
+version = "0.6.10"
+path = "../quote-0.6.10"
 
 [dependencies.syn]
-version = "0.15"
-[dev-dependencies.num]
-version = "0.2"
+version = "0.15.22"
+path = "../syn-0.15.22"
 
 [features]
 full-syntax = ["syn/full"]

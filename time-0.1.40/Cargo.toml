@@ -19,23 +19,16 @@ homepage = "https://github.com/rust-lang/time"
 documentation = "https://doc.rust-lang.org/time"
 license = "MIT/Apache-2.0"
 repository = "https://github.com/rust-lang/time"
+
 [dependencies.libc]
-version = "0.2.1"
+version = "0.2.45"
+path = "../libc-0.2.45"
 
-[dependencies.rustc-serialize]
-version = "0.3"
-optional = true
-[dev-dependencies.log]
-version = "0.4"
-
-[dev-dependencies.winapi]
-version = "0.3.0"
-features = ["std", "processthreadsapi", "winbase"]
-[target."cfg(target_os = \"redox\")".dependencies.redox_syscall]
-version = "0.1"
 [target."cfg(windows)".dependencies.winapi]
-version = "0.3.0"
+version = "0.3.6"
+path = "../winapi-0.3.6"
 features = ["std", "minwinbase", "minwindef", "ntdef", "profileapi", "sysinfoapi", "timezoneapi"]
+
 [badges.appveyor]
 repository = "alexcrichton/time"
 

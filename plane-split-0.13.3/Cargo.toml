@@ -19,15 +19,20 @@ documentation = "https://docs.rs/plane-split"
 keywords = ["geometry", "math"]
 license = "MPL-2.0"
 repository = "https://github.com/servo/plane-split"
+
 [dependencies.binary-space-partition]
 version = "0.1.2"
+path = "../binary-space-partition-0.1.2"
 
 [dependencies.euclid]
-version = "0.19"
+version = "0.19.4"
+path = "../euclid-0.19.4"
 
 [dependencies.log]
-version = "0.4"
+version = "0.4.6"
+path = "../log-0.4.6"
 
 [dependencies.num-traits]
-version = "0.2"
+version = "0.2.6"
+path = "../num-traits-0.2.6"
 default-features = false

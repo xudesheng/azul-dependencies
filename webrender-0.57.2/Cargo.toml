@@ -11,72 +11,38 @@ build = "build.rs"
 default = ["freetype-lib"]
 freetype-lib = ["freetype/servo-freetype-sys"]
 profiler = ["thread_profiler/thread_profiler", "debug_renderer"]
-debugger = ["ws", "serde_json", "serde", "image", "base64", "debug_renderer"]
-capture = ["webrender_api/serialize", "ron", "serde", "debug_renderer"]
-replay = ["webrender_api/deserialize", "ron", "serde"]
 debug_renderer = []
-pathfinder = ["pathfinder_font_renderer", "pathfinder_gfx_utils", "pathfinder_partitioner", "pathfinder_path_utils"]
 serialize_program = ["serde"]
 
 [dependencies]
-app_units = "0.7"
-base64 = { optional = true, version = "0.9" }
-bincode = "1.0"
-bitflags = "1.0"
-byteorder = "1.0"
-cfg-if = "0.1.2"
-fxhash = "0.2.1"
-gleam = "0.6.8"
-image = { optional = true, version = "0.20" }
-lazy_static = "1"
-log = "0.4"
-num-traits = "0.2"
-plane-split = "0.13.3"
-png = { optional = true, version = "0.12" }
-rayon = "1"
-ron = { optional = true, version = "0.1.7" }
-serde = { optional = true, version = "1.0", features = ["serde_derive"] }
-serde_json = { optional = true, version = "1.0" }
-sha2 = "0.7"
-smallvec = "0.6"
-thread_profiler = "0.1.1"
-time = "0.1"
-webrender_api = { version = "0.57.2", path = "../webrender_api" }
-ws = { optional = true, version = "0.7.3" }
-
-[dependencies.pathfinder_font_renderer]
-git = "https://github.com/pcwalton/pathfinder"
-branch = "webrender"
-optional = true
-# Uncomment to test FreeType on macOS:
-# features = ["freetype"]
-
-[dependencies.pathfinder_gfx_utils]
-git = "https://github.com/pcwalton/pathfinder"
-branch = "webrender"
-optional = true
-
-[dependencies.pathfinder_partitioner]
-git = "https://github.com/pcwalton/pathfinder"
-branch = "webrender"
-optional = true
-
-[dependencies.pathfinder_path_utils]
-git = "https://github.com/pcwalton/pathfinder"
-branch = "webrender"
-optional = true
-
-[dev-dependencies]
-mozangle = "0.1"
-rand = "0.4"
+app_units = { version = "0.7.1", path = "../app_units-0.7.1" }
+bincode = { version = "1.0.1", path = "../bincode-1.0.1" }
+bitflags = { version = "1.0.4", path = "../bitflags-1.0.4" }
+byteorder = { version = "1.2.7", path = "../byteorder-1.2.7" }
+cfg-if = { version = "0.1.6", path = "../cfg-if-0.1.6" }
+fxhash = { version = "0.2.1", path = "../fxhash-0.2.1" }
+gleam = { version = "0.6.8", path = "../gleam-0.6.8" }
+image = { optional = true, version = "0.20.1", path = "../image-0.20.1" }
+lazy_static = { version = "1.2.0", path = "../lazy_static-1.2.0" }
+log = { version = "0.4.6", path = "../log-0.4.6" }
+num-traits = { version = "0.2.6", path = "../num-traits-0.2.6" }
+plane-split = { version = "0.13.3", path = "../plane-split-0.13.3" }
+png = { optional = true, version = "0.12.0", path = "../png-0.12.0" }
+rayon = { version = "1.0.3", path = "../rayon-1.0.3" }
+serde = { optional = true, version = "1.0.80", path = "../serde-1.0.80", features = ["serde_derive"] }
+sha2 = { version = "0.7.1", path = "../sha2-0.7.1" }
+smallvec = { version = "0.6.7", path = "../smallvec-0.6.7" }
+thread_profiler = { version = "0.1.3", path = "../thread_profiler-0.1.3" }
+time = { version = "0.1.40", path = "../time-0.1.40" }
+webrender_api = { version = "0.57.2", path = "../webrender_api-0.57.2" }
 
 [target.'cfg(any(target_os = "android", all(unix, not(target_os = "macos"))))'.dependencies]
 freetype = { version = "0.4", default-features = false }
 
 [target.'cfg(target_os = "windows")'.dependencies]
-dwrote = "0.6.2"
+dwrote = { version = "0.6.3", path = "../dwrote-0.6.3", default-features = false }
 
 [target.'cfg(target_os = "macos")'.dependencies]
-core-foundation = "0.6"
-core-graphics = "0.17.1"
-core-text = { version = "13", default-features = false }
+core-foundation = { version = "0.6.3", path = "../core-foundation-0.6.3" }
+core-graphics = { version = "0.17.3", path = "../core-graphics-0.17.3" }
+core-text = { version = "13.1.1", path = "../core-text-13.1.1", default-features = false }

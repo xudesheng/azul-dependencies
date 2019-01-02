@@ -18,31 +18,23 @@ exclude = ["tests/*"]
 description = "PNG decoding and encoding library in pure Rust"
 license = "MIT/Apache-2.0"
 repository = "https://github.com/PistonDevelopers/image-png.git"
+
 [dependencies.bitflags]
-version = "1.0"
+version = "1.0.4"
+path = "../bitflags-1.0.4"
 
 [dependencies.deflate]
-version = "0.7.2"
+version = "0.7.19"
 optional = true
+path = "../deflate-0.7.19"
 
 [dependencies.inflate]
-version = "0.4.2"
+version = "0.4.4"
+path = "../inflate-0.4.4"
 
 [dependencies.num-iter]
-version = "0.1.32"
-[dev-dependencies.getopts]
-version = "0.2.14"
-
-[dev-dependencies.glium]
-version = "0.21"
-features = ["glutin"]
-default-features = false
-
-[dev-dependencies.glob]
-version = "0.2.11"
-
-[dev-dependencies.term]
-version = "0.4"
+version = "0.1.37"
+path = "../num-iter-0.1.37"
 
 [features]
 default = ["png-encoding"]

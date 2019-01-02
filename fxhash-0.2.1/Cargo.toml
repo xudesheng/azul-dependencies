@@ -29,10 +29,7 @@ path = "lib.rs"
 [[bench]]
 name = "fxhash"
 path = "bench.rs"
-[dependencies.byteorder]
-version = "1.0.0"
-[dev-dependencies.seahash]
-version = "3.0.5"
 
-[dev-dependencies.fnv]
-version = "1.0.5"
+[dependencies.byteorder]
+version = "1.2.7"
+path = "../byteorder-1.2.7"

@@ -25,10 +25,14 @@ repository = "https://github.com/alexcrichton/proc-macro2"
 [package.metadata.docs.rs]
 rustc-args = ["--cfg", "procmacro2_semver_exempt"]
 rustdoc-args = ["--cfg", "procmacro2_semver_exempt"]
+
 [dependencies.unicode-xid]
-version = "0.1"
+version = "0.1.0"
+path = "../unicode-xid-0.1.0"
+
 [dev-dependencies.quote]
 version = "0.6"
+path = "../quote-0.6.10"
 
 [features]
 default = ["proc-macro"]

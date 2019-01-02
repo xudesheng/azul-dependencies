@@ -17,14 +17,19 @@ authors = ["ccgn", "bvssvni <bvssvni@gmail.com>", "nwin", "TyOverby <ty@pre-alph
 description = "TIFF decoding and encoding library in pure Rust"
 license = "MIT"
 repository = "https://github.com/PistonDevelopers/image-tiff"
+
 [dependencies.byteorder]
-version = "1.2.*"
+version = "1.2.7"
+path = "../byteorder-1.2.7"
 
 [dependencies.lzw]
-version = "0.10.*"
+version = "0.10.0"
+path = "../lzw-0.10.0"
 
 [dependencies.num-derive]
-version = "0.2.*"
+version = "0.2.3"
+path = "../num-derive-0.2.3"
 
 [dependencies.num-traits]
-version = "0.2.*"
+version = "0.2.6"
+path = "../num-traits-0.2.6"

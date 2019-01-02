@@ -23,17 +23,11 @@ keywords = ["serde", "serialization", "no_std"]
 categories = ["encoding"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/serde-rs/bytes"
+
 [dependencies.serde]
-version = "1.0"
+version = "1.0.80"
 default-features = false
-[dev-dependencies.bincode]
-version = "0.8"
-
-[dev-dependencies.serde_derive]
-version = "1.0"
-
-[dev-dependencies.serde_test]
-version = "1.0"
+path = "../serde-1.0.80"
 
 [features]
 alloc = ["serde/alloc"]
