@@ -7,6 +7,7 @@ use std::mem;
 use winapi::um::dwrite::{DWRITE_FONT_STYLE, DWRITE_FONT_WEIGHT, DWRITE_FONT_STRETCH};
 
 // mirrors DWRITE_FONT_WEIGHT
+#[cfg_attr(feature = "serde_serialization", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum FontWeight {
     Thin,
@@ -63,6 +64,7 @@ impl FontWeight {
 
 // mirrors DWRITE_FONT_STRETCH
 #[repr(u32)]
+#[cfg_attr(feature = "serde_serialization", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum FontStretch {
     Undefined = 0,
@@ -87,6 +89,7 @@ impl FontStretch {
 
 // mirrors DWRITE_FONT_STYLE
 #[repr(u32)]
+#[cfg_attr(feature = "serde_serialization", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Debug, Clone, Copy)]
 pub enum FontStyle {
     Normal = 0,
@@ -113,6 +116,7 @@ pub enum FontSimulations {
         winapi::um::dwrite::DWRITE_FONT_SIMULATIONS_OBLIQUE,
 }
 
+#[cfg_attr(feature = "serde_serialization", derive(Deserialize, Serialize))]
 #[derive(PartialEq, Debug, Clone)]
 pub struct FontDescriptor {
     pub family_name: String,

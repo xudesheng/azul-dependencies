@@ -27,4 +27,4 @@ core-foundation = { version = "0.6.3", path = "../core-foundation-0.6.3" }
 core-graphics = { version = "0.17.3", path = "../core-graphics-0.17.3" }
 
 [target.'cfg(target_os = "windows")'.dependencies]
-dwrote = { version = "0.6.3", path = "../dwrote-0.6.3", default-features = false }
+dwrote = { version = "0.6.3", path = "../dwrote-0.6.3", default-features = false, features = ["serde_serialization"] }

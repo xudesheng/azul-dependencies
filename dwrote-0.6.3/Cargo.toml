@@ -21,9 +21,15 @@ repository = "https://github.com/servo/dwrote-rs"
 [lib]
 name = "dwrote"
 
+[features]
+default = ["serde_serialization"]
+serde_serialization = ["serde", "serde_derive"]
+
 [dependencies]
 lazy_static = { version = "1.2.0", path = "../lazy_static-1.2.0" }
 libc = { version = "0.2.45", path = "../libc-0.2.45" }
+serde = { version = "1.0.80", path = "../serde-1.0.80", optional = true }
+serde_derive = { version = "1.0.80", path = "../serde_derive-1.0.80", optional = true }
 
 [dependencies.winapi]
 version = "0.3.6"

@@ -9,6 +9,11 @@ extern crate lazy_static;
 #[macro_use(DEFINE_GUID)]
 extern crate winapi;
 extern crate libc;
+#[cfg_attr(feature = "serde_serialization", macro_use)]
+#[cfg(feature = "serde_serialization")]
+extern crate serde_derive;
+#[cfg(feature = "serde_serialization")]
+extern crate serde;
 
 include!("types.rs");
 
