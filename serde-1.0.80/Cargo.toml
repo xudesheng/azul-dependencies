@@ -30,10 +30,6 @@ version = "1.0.80"
 path = "../serde_derive-1.0.80"
 optional = true
 
-[dev-dependencies.serde_derive]
-version = "1.0.80"
-path = "../serde_derive-1.0.80"
-
 [features]
 alloc = ["unstable"]
 default = ["std"]

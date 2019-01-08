@@ -20,7 +20,7 @@ clipboard2 = { version = "0.1.1", path = "./clipboard2-0.1.1" }
 serde = { version = "1.0.80", path = "./serde-1.0.80" }
 log = { version = "0.4.6", path = "./log-0.4.6" }
 stb_truetype = { version = "0.2.2", path = "./stb_truetype-0.2.2" }
-# font-loader = { version = "0.7.0", path = "./font-loader-0.7.0" }
+font-loader = { version = "0.7.0", path = "./font-loader-0.7.0" }
 fern = { version = "0.5.7", path = "./fern-0.5.7" }
 backtrace = { version = "0.3.12", path = "./backtrace-0.3.12" }
 webrender = { version = "0.57.2", path = "./webrender-0.57.2" }

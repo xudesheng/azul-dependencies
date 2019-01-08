@@ -13,6 +13,7 @@ fn main() {
     }
     if var("TARGET").map(|target| target == "x86_64-pc-windows-gnu").unwrap_or(false) {
         let dir = var("CARGO_MANIFEST_DIR").unwrap();
+        println!("CARGO MANIFEST DIR: {}", dir);
         println!("cargo:rustc-link-search=native={}", Path::new(&dir).join("lib").display());
     }
 }

@@ -9,9 +9,12 @@ readme = "README.md"
 keywords = ["windows", "ffi", "win32"]
 license = "MIT"
 build = "build.rs"
+
 [lib]
 name = "gdi32"
+
 [dependencies]
-winapi = { version = "0.2.5", path = "../.." }
+winapi = { version = "0.2.8", path = "../winapi-0.2.8", default-features = false }
+
 [build-dependencies]
-winapi-build = { version = "0.1.1", path = "../../build" }
+winapi-build = { version = "0.1.1", path = "../winapi-build-0.1.1" }
