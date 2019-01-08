@@ -8,22 +8,78 @@ license-file = "LICENSE.txt"
 repository = "https://github.com/maps4print/azul-dependencies"
 
 [dependencies]
-glium = { version = "0.22.0", path = "./glium-0.22.0" }
-gleam = { version = "0.6.8", path = "./gleam-0.6.8" }
-euclid = { version = "0.19.4", path = "./euclid-0.19.4" }
-rusttype = { version = "0.7.3", path = "./rusttype-0.7.3" }
-app_units = { version = "0.7.1", path = "./app_units-0.7.1" }
-unicode-normalization = { version = "0.1.7", path = "./unicode-normalization-0.1.7" }
-lazy_static = { version = "1.2.0", path = "./lazy_static-1.2.0" }
-tinyfiledialogs = { version = "3.3.5", path = "./tinyfiledialogs-3.3.5" }
-clipboard2 = { version = "0.1.1", path = "./clipboard2-0.1.1" }
-serde = { version = "1.0.80", path = "./serde-1.0.80" }
-log = { version = "0.4.6", path = "./log-0.4.6" }
-stb_truetype = { version = "0.2.2", path = "./stb_truetype-0.2.2" }
-font-loader = { version = "0.7.0", path = "./font-loader-0.7.0" }
-fern = { version = "0.5.7", path = "./fern-0.5.7" }
-backtrace = { version = "0.3.12", path = "./backtrace-0.3.12" }
+glium                   = { version = "0.22.0", path = "./glium-0.22.0",                default-features = false, features = ["glutin"] }
+gleam                   = { version = "0.6.8",  path = "./gleam-0.6.8",                 default-features = false }
+euclid                  = { version = "0.19.4", path = "./euclid-0.19.4",               default-features = false }
+rusttype                = { version = "0.7.3",  path = "./rusttype-0.7.3",              default-features = false }
+app_units               = { version = "0.7.1",  path = "./app_units-0.7.1",             default-features = false }
+unicode-normalization   = { version = "0.1.7",  path = "./unicode-normalization-0.1.7", default-features = false }
+lazy_static             = { version = "1.2.0",  path = "./lazy_static-1.2.0",           default-features = false }
+tinyfiledialogs         = { version = "3.3.5",  path = "./tinyfiledialogs-3.3.5",       default-features = false }
+clipboard2              = { version = "0.1.1",  path = "./clipboard2-0.1.1",            default-features = false }
+font-loader             = { version = "0.7.0",  path = "./font-loader-0.7.0",           default-features = false }
+serde                   = { version = "1.0.80", path = "./serde-1.0.80",                default-features = false, optional = true }
+log                     = { version = "0.4.6",  path = "./log-0.4.6",                   default-features = false, optional = true }
+stb_truetype            = { version = "0.2.2",  path = "./stb_truetype-0.2.2",          default-features = false, optional = true }
+fern                    = { version = "0.5.7",  path = "./fern-0.5.7",                  default-features = false, optional = true }
+backtrace               = { version = "0.3.12", path = "./backtrace-0.3.12",            default-features = false, optional = true }
+lyon                    = { version = "0.11.0", path = "./lyon-0.11.0",                 default-features = false, optional = true }
+twox-hash               = { version = "1.1.2",  path = "./twox-hash-1.1.2",             default-features = false, optional = true }
+usvg                    = { version = "0.3.0",  path = "./usvg-0.3.0",                  default-features = false, optional = true }
+image                   = { version = "0.20.1", path = "./image-0.20.1",                default-features = false, optional = true, features = ["gif_codec", "jpeg", "png_codec", "pnm", "tiff", "bmp"] }
+
+# Linux: Use webrender with freetype feature enabled
+[target.'cfg(target_os = "linux")'.dependencies]
 webrender = { version = "0.57.2", path = "./webrender-0.57.2" }
+
+# Windows: Use nativefiledialog because of better Unicode support for file browsers
+# TODO: Unicode problems have been fixed upstream, update azul to tinyfiledialogs!
+[target.'cfg(not(target_os = "linux"))'.dependencies]
+# nfd = { version = "0.0.4", path = "./nfd-0.0.4", default-features = false }
+webrender = { version = "0.57.2", path = "./webrender-0.57.2", default-features = false }
+
+[features]
+# The "SVG" feature only enables the creation of shapes / polygons, etc. not the actual parsing
+# (which needs the `svg_parsing` feature).
+default = [
+    "logging",
+]
+
+# Enable this feature to enable crash logging & reporting.
+# Azul will insert custom panic handlers to pop up a message and log
+# crashes to an "error.log" file, see AppConfig for more details
+logging = ["fern", "backtrace", "log"]
+# The SVG rendering module is pretty huge since it needs lyon - if you don't use
+# SVG rendering in your app, you can turn this off to increase compilation
+# speed and decrease your binary size
+svg = ["lyon", "stb_truetype"]
+# This is for activating **parsing** of SVG files. If you, for example, just
+# want to draw shapes on the screen, you do not need to activate this feature,
+# this is just for parsing the SVG from a file.
+svg_parsing = ["svg", "usvg"]
+# If you want an application icon, you can either load it via the raw
+# RGBA bytes or use the icon_loading feature to decode it from a PNG / JPG /
+# whatever image format on startup. Note that this will import the image
+# dependency and use a bit of extra runtime.
+icon_loading = ["glium/icon_loading"]
+# For serializing / deserializing CSS colors using serde
+serde_serialization = ["serde"]
+# twox-hash imports the rand crate, which takes a long time to compile
+# If azul isn't using XXHash, it uses the std-library provided hash algorithm
+#
+# The performance hit should be negligible, so this feature is turned off by
+# default. Maybe turn it on in release builds.
+faster-hashing = ["twox-hash"]
+# On some applications you might not want to load any images. For these purposes
+# the image crate can be disabled, to speed up compile times
+image_loading = ["image"]
+# Features to load extra image formats
+ico = ["image/ico"]
+tga = ["image/tga"]
+hdr = ["image/hdr"]
+jpeg_rayon = ["image/jpeg_rayon"]
+dxt = ["image/dxt"]
+webp = ["image/webp"]
 
 # [workspace]
 # members = [

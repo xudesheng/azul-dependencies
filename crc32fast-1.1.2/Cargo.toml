@@ -23,14 +23,8 @@ repository = "https://github.com/srijs/rust-crc32fast"
 [[bench]]
 name = "bench"
 harness = false
+
 [dependencies.cfg-if]
-version = "0.1"
-[dev-dependencies.bencher]
-version = "0.1"
+version = "0.1.6"
+path = "../cfg-if-0.1.6"
 
-[dev-dependencies.quickcheck]
-version = "0.6"
-default-features = false
-
-[dev-dependencies.rand]
-version = "0.4"

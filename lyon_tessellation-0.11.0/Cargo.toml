@@ -23,18 +23,20 @@ repository = "https://github.com/nical/lyon"
 [lib]
 name = "lyon_tessellation"
 path = "src/lib.rs"
+
 [dependencies.lyon_path]
 version = "0.11.0"
+path = "../lyon_path-0.11.0"
 
 [dependencies.serde]
-version = "1.0"
+version = "1.0.80"
+path = "../serde-1.0.80"
 features = ["serde_derive"]
 optional = true
 
 [dependencies.sid]
-version = "0.5"
-[dev-dependencies.lyon_extra]
-version = "0.11.0"
+version = "0.5.2"
+path = "../sid-0.5.2"
 
 [features]
 serialization = ["serde", "lyon_path/serialization"]

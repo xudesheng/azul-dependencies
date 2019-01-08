@@ -23,8 +23,10 @@ repository = "https://github.com/sfackler/rust-phf"
 name = "phf"
 path = "src/lib.rs"
 test = false
+
 [dependencies.phf_shared]
-version = "=0.7.23"
+version = "0.7.23"
+path = "../phf_shared-0.7.23"
 
 [features]
 core = ["phf_shared/core"]

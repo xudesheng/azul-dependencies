@@ -28,27 +28,26 @@ doctest = true
 [[bench]]
 name = "parser"
 harness = false
+
 [dependencies.log]
-version = "0.4.5"
+version = "0.4.6"
+path = "../log-0.4.6"
 
 [dependencies.roxmltree]
-version = "0.1"
+version = "0.1.0"
+path = "../roxmltree-0.1.0"
 
 [dependencies.simplecss]
-version = "0.1"
+version = "0.1.0"
+path = "../simplecss-0.1.0"
 
 [dependencies.slab]
-version = "0.4"
+version = "0.4.1"
+path = "../slab-0.4.1"
 
 [dependencies.svgtypes]
-version = "0.2"
-[dev-dependencies.bencher]
-version = "0.1"
+version = "0.2.0"
+path = "../svgtypes-0.2.0"
 
-[dev-dependencies.pretty_assertions]
-version = "0.5.1"
-
-[dev-dependencies.time]
-version = "0.1"
 [badges.travis-ci]
 repository = "RazrFalcon/svgdom"

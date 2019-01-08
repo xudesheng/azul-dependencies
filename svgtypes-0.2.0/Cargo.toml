@@ -25,16 +25,22 @@ repository = "https://github.com/RazrFalcon/svgtypes"
 [lib]
 path = "src/lib.rs"
 doctest = true
+
 [dependencies.float-cmp]
 version = "0.4"
+path = "../float-cmp-0.4.0"
 
 [dependencies.log]
-version = "0.4"
+version = "0.4.6"
+path = "../log-0.4.6"
 
 [dependencies.phf]
 version = "0.7.23"
+path = "../phf-0.7.23"
 
 [dependencies.xmlparser]
-version = "0.6"
+version = "0.6.1"
+path = "../xmlparser-0.6.1"
+
 [badges.travis-ci]
 repository = "RazrFalcon/svgtypes"

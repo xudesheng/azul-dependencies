@@ -25,46 +25,31 @@ repository = "https://github.com/RazrFalcon/usvg"
 [lib]
 name = "usvg"
 path = "src/lib.rs"
+
 [dependencies.base64]
-version = "0.9"
+version = "0.9.3"
+path = "../base64-0.9.3"
 
 [dependencies.libflate]
-version = "0.1"
+version = "0.1.19"
+path = "../libflate-0.1.19"
 
 [dependencies.log]
-version = "0.4"
+version = "0.4.6"
+path = "../log-0.4.6"
 
 [dependencies.lyon_geom]
-version = "0.12"
+version = "0.12.2"
+path = "../lyon_geom-0.12.2"
 
 [dependencies.rctree]
 version = "0.2.1"
+path = "../rctree-0.2.1"
 
 [dependencies.svgdom]
-version = "0.14"
+version = "0.14.0"
+path = "../svgdom-0.14.0"
 
 [dependencies.unicode-segmentation]
 version = "1.2.1"
-[dev-dependencies.assert_cli]
-version = "0.6"
-
-[dev-dependencies.pretty_assertions]
-version = "0.5.1"
-
-[dev-dependencies.rustc-test]
-version = "0.3"
-
-[dev-dependencies.rustc_version]
-version = "0.2.2"
-
-[dev-dependencies.serde]
-version = "1.0.34"
-
-[dev-dependencies.serde_derive]
-version = "1.0.34"
-
-[dev-dependencies.tempdir]
-version = "0.3"
-
-[dev-dependencies.toml]
-version = "0.4.5"
+path = "../unicode-segmentation-1.2.1"

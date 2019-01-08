@@ -22,17 +22,23 @@ repository = "https://github.com/nical/lyon"
 
 [lib]
 name = "lyon_geom"
+
+
 [dependencies.arrayvec]
-version = "0.4"
+version = "0.4.8"
+path = "../arrayvec-0.4.8"
 
 [dependencies.euclid]
-version = "0.18.0"
+version = "0.19.0"
+path = "../euclid-0.19.4"
 
 [dependencies.num-traits]
-version = "0.1.40"
+version = "0.2.6"
+path = "../num-traits-0.2.6"
 
 [dependencies.serde]
-version = "1.0"
+version = "1.0.80"
+path = "../serde-1.0.80"
 features = ["serde_derive"]
 optional = true
 

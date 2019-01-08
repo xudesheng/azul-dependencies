@@ -23,12 +23,10 @@ repository = "https://github.com/sfackler/rust-phf"
 name = "phf_shared"
 path = "src/lib.rs"
 test = false
-[dependencies.siphasher]
-version = "0.2"
 
-[dependencies.unicase]
-version = "1.4"
-optional = true
+[dependencies.siphasher]
+version = "0.2.3"
+path = "../siphasher-0.2.3"
 
 [features]
 core = []

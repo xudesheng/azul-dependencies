@@ -21,11 +21,14 @@ repository = "https://github.com/nical/lyon"
 
 [lib]
 name = "lyon_path"
+
 [dependencies.lyon_geom]
-version = "0.11.0"
+version = "0.11.1"
+path = "../lyon_geom-0.11.1"
 
 [dependencies.serde]
-version = "1.0"
+version = "1.0.80"
+path = "../serde-1.0.80"
 features = ["serde_derive"]
 optional = true
 

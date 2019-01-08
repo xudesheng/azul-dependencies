@@ -20,5 +20,7 @@ repository = "https://github.com/nical/sid"
 
 [lib]
 name = "sid"
+
 [dependencies.num-traits]
-version = "0.1.39"
+version = "0.2.6"
+path = "../num-traits-0.2.6"
