@@ -25,37 +25,35 @@ repository = "https://github.com/RazrFalcon/roxmltree"
 [[bench]]
 name = "xml"
 harness = false
-[dependencies.bencher]
-version = "0.1"
-optional = true
 
-[dependencies.elementtree]
-version = "0.5.0"
-optional = true
-
-[dependencies.sxd-document]
-version = "0.2.6"
-optional = true
-
-[dependencies.treexml]
-version = "0.7.0"
-optional = true
-
-[dependencies.xml-rs]
-version = "0.8.0"
-optional = true
+# [dependencies.bencher]
+# version = "0.1"
+# optional = true
+#
+# [dependencies.elementtree]
+# version = "0.5.0"
+# optional = true
+#
+# [dependencies.sxd-document]
+# version = "0.2.6"
+# optional = true
+#
+# [dependencies.treexml]
+# version = "0.7.0"
+# optional = true
+#
+# [dependencies.xml-rs]
+# version = "0.8.0"
+# optional = true
 
 [dependencies.xmlparser]
-version = "0.6.0"
+version = "0.6.1"
+path = "../xmlparser-0.6.1"
 
-[dependencies.xmltree]
-version = "0.8"
-optional = true
-[dev-dependencies.pretty_assertions]
-version = "0.5.1"
+# [dependencies.xmltree]
+# version = "0.8"
+# optional = true
 
-[dev-dependencies.rustc-test]
-version = "0.3"
 
-[features]
-benchmark = ["bencher", "xmltree", "sxd-document", "elementtree", "treexml", "xml-rs"]
+# [features]
+# benchmark = ["bencher", "xmltree", "sxd-document", "elementtree", "treexml", "xml-rs"]
