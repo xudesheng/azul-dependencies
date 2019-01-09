@@ -15,7 +15,7 @@ rusttype                = { version = "0.7.3",  path = "./rusttype-0.7.3",      
 app_units               = { version = "0.7.1",  path = "./app_units-0.7.1",             default-features = false }
 unicode-normalization   = { version = "0.1.7",  path = "./unicode-normalization-0.1.7", default-features = false }
 lazy_static             = { version = "1.2.0",  path = "./lazy_static-1.2.0",           default-features = false }
-tinyfiledialogs         = { version = "3.3.5",  path = "./tinyfiledialogs-3.3.5",       default-features = false }
+tinyfiledialogs         = { version = "3.3.5",  path = "./tinyfiledialogs-git@75764b",  default-features = false }
 clipboard2              = { version = "0.1.1",  path = "./clipboard2-0.1.1",            default-features = false }
 font-loader             = { version = "0.7.0",  path = "./font-loader-0.7.0",           default-features = false }
 serde                   = { version = "1.0.80", path = "./serde-1.0.80",                default-features = false, optional = true }
@@ -30,7 +30,7 @@ image                   = { version = "0.20.1", path = "./image-0.20.1",        
 
 # Linux: Use webrender with freetype feature enabled
 [target.'cfg(target_os = "linux")'.dependencies]
-webrender = { version = "0.57.2", path = "./webrender-0.57.2" }
+webrender = { version = "0.57.2", path = "./webrender-0.57.2" } # rev = "92235d1fc4ff4c4fb4e1ed709eb3136e96c786b5"
 
 # Windows: Use nativefiledialog because of better Unicode support for file browsers
 # TODO: Unicode problems have been fixed upstream, update azul to tinyfiledialogs!

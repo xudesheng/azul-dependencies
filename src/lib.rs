@@ -23,7 +23,6 @@ pub extern crate backtrace;
 #[cfg(feature = "image_loading")]
 pub extern crate image;
 #[cfg(feature = "serde_serialization")]
-#[cfg_attr(feature = "serde_serialization", macro_use)]
 pub extern crate serde;
 #[cfg(feature = "svg")]
 pub extern crate lyon;
@@ -249,4 +248,120 @@ macro_rules! __lazy_static_create {
     ($NAME:ident, $T:ty) => {
         static $NAME: ::azul_dependencies::lazy_static::lazy::Lazy<$T> = ::azul_dependencies::lazy_static::lazy::Lazy::INIT;
     };
+}
+
+// glium-0.22.0/src/macros.rs --------------------------------------------------
+
+/// Returns an implementation-defined type which implements the `Uniform` trait.
+#[macro_export]
+macro_rules! uniform {
+    () => {
+        ::azul_dependencies::glium::uniforms::EmptyUniforms
+    };
+
+    ($field:ident: $value:expr) => {
+        ::azul_dependencies::glium::uniforms::UniformsStorage::new(stringify!($field), $value)
+    };
+
+    ($field1:ident: $value1:expr, $($field:ident: $value:expr),+) => {
+        {
+            let uniforms = ::azul_dependencies::glium::uniforms::UniformsStorage::new(stringify!($field1), $value1);
+            $(
+                let uniforms = uniforms.add(stringify!($field), $value);
+            )+
+            uniforms
+        }
+    };
+
+    ($($field:ident: $value:expr),*,) => {
+        uniform!($($field: $value),*)
+    };
+}
+
+/// Implements the `glium::vertex::Vertex` trait for the given type.
+///
+/// The parameters must be the name of the struct and the names of its fields.
+#[macro_export]
+macro_rules! implement_vertex {
+    ($struct_name:ident, $($field_name:ident),+) => (
+        impl ::azul_dependencies::glium::vertex::Vertex for $struct_name {
+            #[inline]
+            fn build_bindings() -> ::azul_dependencies::glium::vertex::VertexFormat {
+                use std::borrow::Cow;
+
+                // TODO: use a &'static [] if possible
+
+                Cow::Owned(vec![
+                    $(
+                        (
+                            Cow::Borrowed(stringify!($field_name)),
+                            {
+                                // calculate the offset of the struct fields
+                                let dummy: $struct_name = unsafe { ::std::mem::uninitialized() };
+                                let offset: usize = {
+                                    let dummy_ref = &dummy;
+                                    let field_ref = &dummy.$field_name;
+                                    (field_ref as *const _ as usize) - (dummy_ref as *const _ as usize)
+                                };
+                                // NOTE: `glium::vertex::Vertex` requires `$struct_name` to have `Copy` trait
+                                // `Copy` excludes `Drop`, so we don't have to `std::mem::forget(dummy)`
+                                offset
+                            },
+                            {
+                                fn attr_type_of_val<T: ::azul_dependencies::glium::vertex::Attribute>(_: &T)
+                                    -> ::azul_dependencies::glium::vertex::AttributeType
+                                {
+                                    <T as ::azul_dependencies::glium::vertex::Attribute>::get_type()
+                                }
+                                let dummy: &$struct_name = unsafe { ::std::mem::transmute(0usize) };
+                                attr_type_of_val(&dummy.$field_name)
+                            },
+                            false
+                        )
+                    ),+
+                ])
+            }
+        }
+    );
+
+    ($struct_name:ident, $($field_name:ident normalize($should_normalize:expr)),+) => {
+        impl ::azul_dependencies::glium::vertex::Vertex for $struct_name {
+            #[inline]
+            fn build_bindings() -> ::azul_dependencies::glium::vertex::VertexFormat {
+                use std::borrow::Cow;
+
+                // TODO: use a &'static [] if possible
+
+                Cow::Owned(vec![
+                    $(
+                        (
+                            Cow::Borrowed(stringify!($field_name)),
+                            {
+                                let dummy: &$struct_name = unsafe { ::std::mem::transmute(0usize) };
+                                let dummy_field = &dummy.$field_name;
+                                let dummy_field: usize = unsafe { ::std::mem::transmute(dummy_field) };
+                                dummy_field
+                            },
+                            {
+                                fn attr_type_of_val<T: ::azul_dependencies::glium::vertex::Attribute>(_: &T)
+                                    -> ::azul_dependencies::glium::vertex::AttributeType
+                                {
+                                    <T as ::azul_dependencies::glium::vertex::Attribute>::get_type()
+                                }
+                                let dummy: &$struct_name = unsafe { ::std::mem::transmute(0usize) };
+                                attr_type_of_val(&dummy.$field_name)
+                            },
+                            {
+                                $should_normalize
+                            }
+                        )
+                    ),+
+                ])
+            }
+        }
+    };
+
+    ($struct_name:ident, $($field_name:ident),+,) => (
+        implement_vertex!($struct_name, $($field_name),+);
+    );
 }
