@@ -44,7 +44,3 @@ path = "../xdg-2.2.0"
 [dependencies.xml-rs]
 version = "0.8.0"
 path = "../xml-rs-0.8.0"
-
-[dev-dependencies.smithay-client-toolkit]
-version = "0.4.3"
-path = "../smithay-client-toolkit-0.4.3"

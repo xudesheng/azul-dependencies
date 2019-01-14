@@ -29,12 +29,6 @@ opt-level = 3
 [lib]
 name = "byteorder"
 bench = false
-[dev-dependencies.quickcheck]
-version = "0.7"
-default-features = false
-
-[dev-dependencies.rand]
-version = "0.5"
 
 [features]
 default = ["std"]

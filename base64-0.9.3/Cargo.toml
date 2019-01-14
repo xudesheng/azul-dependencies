@@ -31,7 +31,3 @@ path = "../byteorder-1.2.7"
 [dependencies.safemem]
 version = "0.3"
 path = "../safemem-0.3.0"
-
-[dev-dependencies.rand]
-version = "0.5.5"
-path = "../rand-0.5.5"
