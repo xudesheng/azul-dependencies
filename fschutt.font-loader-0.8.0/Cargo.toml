@@ -1,0 +1,33 @@
+[package]
+name = "font-loader"
+version = "0.8.0"
+authors = ["MSleepyPanda <m.sleepypanda@gmail.com>"]
+license = "MIT"
+readme = "Readme.md"
+documentation = "https://docs.rs/font-loader/"
+homepage = "https://github.com/MSleepyPanda/rust-font-loader"
+repository = "https://github.com/MSleepyPanda/rust-font-loader"
+keywords = ["font", "loading","loader", "wingdi", "fontconfig"]
+description = "A font loading utility written in and for rust."
+
+[dependencies.libc]
+version = "0.2.45"
+path = "../libc-0.2.45"
+
+[target."cfg(all(unix, not(target_os = \"macos\")))".dependencies.servo-fontconfig]
+version = "0.4.0"
+path = "../servo-fontconfig-0.4.0"
+
+[target."cfg(target_os = \"macos\")".dependencies.core-foundation]
+version = "0.6.3"
+path = "../core-foundation-0.6.3"
+
+[target."cfg(target_os = \"macos\")".dependencies.core-text]
+version = "10.0"
+path = "../core-text-10.0.0"
+
+[target."cfg(target_os = \"windows\")".dependencies.winapi]
+version = "0.3.6"
+path = "../winapi-0.3.6"
+default-features = false
+features = ["winuser", "wingdi"]
