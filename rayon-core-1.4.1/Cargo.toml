@@ -14,8 +14,6 @@
 name = "rayon-core"
 version = "1.4.1"
 authors = ["Niko Matsakis <niko@alum.mit.edu>", "Josh Stone <cuviper@gmail.com>"]
-build = "build.rs"
-links = "rayon-core"
 description = "Core APIs for Rayon"
 documentation = "https://docs.rs/rayon/"
 readme = "README.md"
