@@ -11,8 +11,10 @@ pub extern crate unicode_normalization;
 pub extern crate tinyfiledialogs;
 pub extern crate clipboard2;
 pub extern crate font_loader;
+pub extern crate freetype_sys; // TODO: links = "freetype" crate!
+pub extern crate expat_sys; // TODO: links = "expat" crate!
+pub extern crate fontconfig_sys; // TODO: links = "fontconfig_sys" crate!
 
-#[cfg(feature = "logging")]
 pub extern crate log;
 #[cfg(feature = "svg")]
 pub extern crate stb_truetype;

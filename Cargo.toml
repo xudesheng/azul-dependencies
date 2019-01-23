@@ -18,6 +18,9 @@ lazy_static             = { version = "1.2.0",  path = "./lazy_static-1.2.0",   
 tinyfiledialogs         = { version = "3.3.5",  path = "./tinyfiledialogs-git@75764b",  default-features = false }
 clipboard2              = { version = "0.1.1",  path = "./clipboard2-0.1.1",            default-features = false }
 font-loader             = { version = "0.8.0",  path = "./fschutt.font-loader-0.8.0",   default-features = false }
+servo-freetype-sys      = { version = "4.0.5",  path = "./servo-freetype-sys-4.0.5" }
+expat-sys               = { version = "2.1.6",  path = "./expat-sys-2.1.6" }
+servo-fontconfig-sys    = { version = "4.0.7",  path = "./servo-fontconfig-sys-4.0.7" }
 serde                   = { version = "1.0.80", path = "./serde-1.0.80",                default-features = false, optional = true }
 log                     = { version = "0.4.6",  path = "./log-0.4.6",                   default-features = false, optional = true }
 stb_truetype            = { version = "0.2.2",  path = "./stb_truetype-0.2.2",          default-features = false, optional = true }

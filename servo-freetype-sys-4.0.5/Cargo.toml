@@ -15,7 +15,6 @@ name = "servo-freetype-sys"
 version = "4.0.5"
 authors = ["The FreeType Team"]
 build = "build.rs"
-links = "freetype"
 description = "FreeType is a freely available software library to render fonts."
 homepage = "http://www.freetype.org/"
 license = "FTL / GPL-2.0"
@@ -23,8 +22,11 @@ repository = "https://github.com/servo/libfreetype2/"
 
 [lib]
 name = "freetype_sys"
+
 [build-dependencies.cmake]
-version = "0.1"
+version = "0.1.35"
+path = "../cmake-0.1.35"
 
 [build-dependencies.pkg-config]
-version = "0.3"
+version = "0.3.14"
+path = "../pkg-config-0.3.14"

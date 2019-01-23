@@ -15,7 +15,6 @@ name = "servo-fontconfig-sys"
 version = "4.0.7"
 authors = ["Keith Packard <keithp@keithp.com>", "Patrick Lam <plam@mit.edu>"]
 build = "build.rs"
-links = "fontconfig"
 description = "Font configuration and customization library"
 homepage = "http://fontconfig.org"
 license = "MIT"
@@ -24,10 +23,11 @@ repository = "https://github.com/servo/libfontconfig/"
 [lib]
 name = "fontconfig_sys"
 path = "lib.rs"
-[dependencies.expat-sys]
-version = "2.1.0"
 
-[dependencies.servo-freetype-sys]
-version = "4.0.0"
+[dependencies]
+servo-freetype-sys      = { version = "4.0.5",  path = "../servo-freetype-sys-4.0.5" }
+expat-sys               = { version = "2.1.6",  path = "../expat-sys-2.1.6" }
+
 [build-dependencies.pkg-config]
-version = "0.3"
+version = "0.3.14"
+path = "../pkg-config-0.3.14"
