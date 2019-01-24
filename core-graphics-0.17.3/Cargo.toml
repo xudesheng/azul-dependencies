@@ -22,7 +22,8 @@ repository = "https://github.com/servo/core-foundation-rs"
 version = "1.0"
 
 [dependencies.core-foundation]
-version = "0.6"
+version = "0.6.3"
+path = "../core-foundation-0.6.3"
 
 [dependencies.foreign-types]
 version = "0.3.0"

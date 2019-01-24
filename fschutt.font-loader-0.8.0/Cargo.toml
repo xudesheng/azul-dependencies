@@ -23,8 +23,8 @@ version = "0.6.3"
 path = "../core-foundation-0.6.3"
 
 [target."cfg(target_os = \"macos\")".dependencies.core-text]
-version = "10.0"
-path = "../core-text-10.0.0"
+version = "13.1.1"
+path = "../core-text-13.1.1"
 
 [target."cfg(target_os = \"windows\")".dependencies.winapi]
 version = "0.3.6"
