@@ -29,10 +29,12 @@ version = "1.0"
 version = "0.1"
 
 [dependencies.core-foundation]
-version = "0.6"
+version = "0.6.3"
+path = "../core-foundation-0.6.3"
 
 [dependencies.core-graphics]
-version = "0.17"
+version = "0.17.3"
+path = "../core-graphics-0.17.3"
 
 [dependencies.foreign-types]
 version = "0.3"
@@ -41,4 +43,5 @@ version = "0.3"
 version = "0.2"
 
 [dependencies.objc]
-version = "0.2.3"
+version = "0.2.5"
+path = "../objc-0.2.5"

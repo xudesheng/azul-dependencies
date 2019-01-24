@@ -18,10 +18,12 @@ description = "Bindings to the Core Text framework."
 license = "MIT/Apache-2.0"
 repository = "https://github.com/servo/core-foundation-rs"
 [dependencies.core-foundation]
-version = "0.6.2"
+version = "0.6.3"
+path = "../core-foundation-0.6.3"
 
 [dependencies.core-graphics]
-version = "0.17"
+version = "0.17.3"
+path = "../core-graphics-0.17.3"
 
 [dependencies.foreign-types]
 version = "0.3"

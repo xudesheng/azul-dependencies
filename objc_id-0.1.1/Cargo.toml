@@ -22,4 +22,5 @@ keywords = ["objective-c", "osx", "ios"]
 license = "MIT"
 repository = "http://github.com/SSheldon/rust-objc-id"
 [dependencies.objc]
-version = "0.2.4"
+version = "0.2.5"
+path = "../objc-0.2.5"

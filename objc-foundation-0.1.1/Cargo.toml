@@ -13,5 +13,5 @@ exclude = [".gitignore"]
 
 [dependencies]
 block = "0.1"
-objc = "0.2"
-objc_id = "0.1"
+objc = { version = "0.2.5", path = "../objc-0.2.5" }
+objc_id = { version = "0.1.1", path = "../objc_id-0.1.1" }

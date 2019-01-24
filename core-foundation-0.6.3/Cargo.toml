@@ -24,8 +24,7 @@ version = "0.4"
 optional = true
 
 [dependencies.core-foundation-sys]
-version = "0.6.1"
-path = "../core-foundation-sys-0.6.2"
+version = "0.6"
 
 [dependencies.libc]
 version = "0.2.45"
