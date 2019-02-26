@@ -30,7 +30,7 @@ path = "../fnv-1.0.6"
 
 [dependencies.glutin]
 version = "0.19.0"
-path = "../glutin-0.19.0"
+path = "../tomaka.glutin#23b3b10"
 features = []
 optional = true
 
