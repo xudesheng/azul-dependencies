@@ -20,8 +20,12 @@ documentation = "https://docs.rs/libloading/"
 keywords = ["dlopen", "load", "shared", "dylib"]
 license = "ISC"
 repository = "https://github.com/nagisa/rust_libloading/"
+
 [build-dependencies.cc]
-version = "1.0"
+version = "1.0.26"
+path = "../cc-1.0.26"
+
 [target."cfg(windows)".dependencies.winapi]
-version = "0.3"
+version = "0.3.6"
+path = "../winapi-0.3.6"
 features = ["winerror", "errhandlingapi", "libloaderapi"]
