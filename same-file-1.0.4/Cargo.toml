@@ -22,7 +22,6 @@ readme = "README.md"
 keywords = ["same", "file", "equal", "inode"]
 license = "Unlicense/MIT"
 repository = "https://github.com/BurntSushi/same-file"
-[dev-dependencies.rand]
-version = "0.4"
+
 [target."cfg(windows)".dependencies.winapi-util]
 version = "0.1.1"

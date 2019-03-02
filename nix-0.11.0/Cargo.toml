@@ -40,32 +40,26 @@ harness = false
 [[test]]
 name = "test-ptymaster-drop"
 path = "test/test_ptymaster_drop.rs"
+
 [dependencies.bitflags]
-version = "1.0"
+version = "1.0.4"
+path = "../bitflags-1.0.4"
 
 [dependencies.cfg-if]
-version = "0.1.0"
+version = "0.1.6"
+path = "../cfg-if-0.1.6"
 
 [dependencies.libc]
-version = "0.2.42"
+version = "0.2.45"
+path = "../libc-0.2.45"
 
 [dependencies.void]
 version = "1.0.2"
-[dev-dependencies.bytes]
-version = "0.4.8"
+path = "../void-1.0.2"
 
-[dev-dependencies.lazy_static]
-version = "1"
-
-[dev-dependencies.rand]
-version = "0.4"
-
-[dev-dependencies.tempdir]
-version = "0.3"
-
-[dev-dependencies.tempfile]
-version = "2"
 [target."cfg(target_os = \"dragonfly\")".build-dependencies.cc]
-version = "1"
+version = "1.0.26"
+path = "cc-1.0.26"
+
 [target."cfg(target_os = \"freebsd\")".dev-dependencies.sysctl]
 version = "0.1"

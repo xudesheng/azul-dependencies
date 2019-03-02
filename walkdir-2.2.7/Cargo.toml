@@ -28,27 +28,14 @@ repository = "https://github.com/BurntSushi/walkdir"
 version = "1.0.4"
 path = "../same-file-1.0.4"
 
-[dev-dependencies.docopt]
-version = "1.0.1"
-
-[dev-dependencies.quickcheck]
-version = "0.7"
-default-features = false
-
-[dev-dependencies.rand]
-version = "0.5"
-
-[dev-dependencies.serde]
-version = "1"
-
-[dev-dependencies.serde_derive]
-version = "1"
 [target."cfg(windows)".dependencies.winapi]
-version = "0.3"
+version = "0.3.6"
+path = "../winapi-0.3.6"
 features = ["std", "winnt"]
 
 [target."cfg(windows)".dependencies.winapi-util]
 version = "0.1.1"
+
 [badges.appveyor]
 repository = "BurntSushi/walkdir"
 
