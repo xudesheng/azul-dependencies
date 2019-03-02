@@ -10,7 +10,6 @@ use super::window::WindowStore;
 use sctk::reexports::client::Proxy;
 use sctk::reexports::client::protocol::wl_pointer::{self, Event as PtrEvent, WlPointer};
 use sctk::reexports::client::protocol::wl_seat;
-use sctk::reexports::client::protocol::wl_seat::RequestsTrait as SeatRequests;
 
 pub fn implement_pointer(
     seat: &Proxy<wl_seat::WlSeat>,

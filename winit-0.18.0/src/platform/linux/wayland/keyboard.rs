@@ -7,7 +7,6 @@ use sctk::keyboard::{
 use sctk::reexports::client::protocol::wl_keyboard;
 use sctk::reexports::client::Proxy;
 use sctk::reexports::client::protocol::wl_seat;
-use sctk::reexports::client::protocol::wl_seat::RequestsTrait as SeatRequests;
 
 use {ElementState, KeyboardInput, ModifiersState, VirtualKeyCode, WindowEvent};
 

@@ -9,8 +9,6 @@ use window::MonitorId as RootMonitorId;
 use sctk::window::{ConceptFrame, Event as WEvent, Window as SWindow};
 use sctk::reexports::client::{Display, Proxy};
 use sctk::reexports::client::protocol::{wl_seat, wl_surface, wl_output};
-use sctk::reexports::client::protocol::wl_compositor::RequestsTrait as CompositorRequests;
-use sctk::reexports::client::protocol::wl_surface::RequestsTrait as SurfaceRequests;
 use sctk::output::OutputMgr;
 
 use super::{make_wid, EventsLoop, MonitorId, WindowId};

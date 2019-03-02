@@ -287,7 +287,7 @@ impl UnownedWindow {
                         max_dimensions = Some(dimensions.into());
                         min_dimensions = Some(dimensions.into());
 
-                        let mut shared_state_lock = window.shared_state.lock();
+                        let mut shared_state_lock = window.shared_state.lock().unwrap().unwrap();
                         shared_state_lock.min_dimensions = window_attrs.min_dimensions;
                         shared_state_lock.max_dimensions = window_attrs.max_dimensions;
                     }
@@ -515,14 +515,14 @@ impl UnownedWindow {
         match monitor {
             None => {
                 let flusher = self.set_fullscreen_hint(false);
-                if let Some(position) = self.shared_state.lock().restore_position.take() {
+                if let Some(position) = self.shared_state.lock().unwrap().unwrap().restore_position.take() {
                     self.set_position_inner(position.0, position.1).queue();
                 }
                 flusher
             },
             Some(RootMonitorId { inner: PlatformMonitorId::X(monitor) }) => {
                 let window_position = self.get_position_physical();
-                self.shared_state.lock().restore_position = window_position;
+                self.shared_state.lock().unwrap().unwrap().restore_position = window_position;
                 let monitor_origin: (i32, i32) = monitor.get_position().into();
                 self.set_position_inner(monitor_origin.0, monitor_origin.1).queue();
                 self.set_fullscreen_hint(true)
@@ -551,14 +551,14 @@ impl UnownedWindow {
     #[inline]
     pub fn get_current_monitor(&self) -> X11MonitorId {
         let monitor = self.shared_state
-            .lock()
+            .lock().unwrap().unwrap()
             .last_monitor
             .as_ref()
             .cloned();
         monitor
             .unwrap_or_else(|| {
                 let monitor = self.xconn.get_monitor_for_window(self.get_rect()).to_owned();
-                self.shared_state.lock().last_monitor = Some(monitor.clone());
+                self.shared_state.lock().unwrap().unwrap().last_monitor = Some(monitor.clone());
                 monitor
             })
     }
@@ -701,11 +701,11 @@ impl UnownedWindow {
 
     fn update_cached_frame_extents(&self) {
         let extents = self.xconn.get_frame_extents_heuristic(self.xwindow, self.root);
-        (*self.shared_state.lock()).frame_extents = Some(extents);
+        (*self.shared_state.lock().unwrap()).frame_extents = Some(extents);
     }
 
     pub(crate) fn invalidate_cached_frame_extents(&self) {
-        (*self.shared_state.lock()).frame_extents.take();
+        (*self.shared_state.lock().unwrap()).frame_extents.take();
     }
 
     pub(crate) fn get_position_physical(&self) -> Option<(i32, i32)> {
@@ -792,7 +792,7 @@ impl UnownedWindow {
     }
 
     pub(crate) fn get_outer_size_physical(&self) -> Option<(u32, u32)> {
-        let extents = self.shared_state.lock().frame_extents.clone();
+        let extents = self.shared_state.lock().unwrap().frame_extents.clone();
         if let Some(extents) = extents {
             self.get_inner_size_physical()
                 .map(|(w, h)| extents.inner_size_to_outer(w, h))
@@ -804,7 +804,7 @@ impl UnownedWindow {
 
     #[inline]
     pub fn get_outer_size(&self) -> Option<LogicalSize> {
-        let extents = self.shared_state.lock().frame_extents.clone();
+        let extents = self.shared_state.lock().unwrap().frame_extents.clone();
         if let Some(extents) = extents {
             self.get_inner_size()
                 .map(|logical| extents.inner_size_to_outer_logical(logical, self.get_hidpi_factor()))
@@ -848,7 +848,7 @@ impl UnownedWindow {
 
     #[inline]
     pub fn set_min_dimensions(&self, logical_dimensions: Option<LogicalSize>) {
-        self.shared_state.lock().min_dimensions = logical_dimensions;
+        self.shared_state.lock().unwrap().min_dimensions = logical_dimensions;
         let physical_dimensions = logical_dimensions.map(|logical_dimensions| {
             logical_dimensions.to_physical(self.get_hidpi_factor()).into()
         });
@@ -862,7 +862,7 @@ impl UnownedWindow {
 
     #[inline]
     pub fn set_max_dimensions(&self, logical_dimensions: Option<LogicalSize>) {
-        self.shared_state.lock().max_dimensions = logical_dimensions;
+        self.shared_state.lock().unwrap().max_dimensions = logical_dimensions;
         let physical_dimensions = logical_dimensions.map(|logical_dimensions| {
             logical_dimensions.to_physical(self.get_hidpi_factor()).into()
         });
@@ -915,7 +915,7 @@ impl UnownedWindow {
         }
 
         let (logical_min, logical_max) = if resizable {
-            let shared_state_lock = self.shared_state.lock();
+            let shared_state_lock = self.shared_state.lock().unwrap();
             (shared_state_lock.min_dimensions, shared_state_lock.max_dimensions)
         } else {
             let window_size = self.get_inner_size();
@@ -1052,8 +1052,8 @@ impl UnownedWindow {
 
     #[inline]
     pub fn set_cursor(&self, cursor: MouseCursor) {
-        *self.cursor.lock() = cursor;
-        if !*self.cursor_hidden.lock() {
+        *self.cursor.lock().unwrap() = cursor;
+        if !*self.cursor_hidden.lock().unwrap() {
             self.update_cursor(self.get_cursor(cursor));
         }
     }
@@ -1098,7 +1098,7 @@ impl UnownedWindow {
 
     #[inline]
     pub fn grab_cursor(&self, grab: bool) -> Result<(), String> {
-        let mut grabbed_lock = self.cursor_grabbed.lock();
+        let mut grabbed_lock = self.cursor_grabbed.lock().unwrap();
         if grab == *grabbed_lock { return Ok(()); }
         unsafe {
             // We ungrab before grabbing to prevent passive grabs from causing `AlreadyGrabbed`.
@@ -1154,12 +1154,12 @@ impl UnownedWindow {
 
     #[inline]
     pub fn hide_cursor(&self, hide: bool) {
-        let mut hidden_lock = self.cursor_hidden.lock();
+        let mut hidden_lock = self.cursor_hidden.lock().unwrap();
         if hide == *hidden_lock {return; }
         let cursor = if hide {
             self.create_empty_cursor().expect("Failed to create empty cursor")
         } else {
-            self.get_cursor(*self.cursor.lock())
+            self.get_cursor(*self.cursor.lock().unwrap())
         };
         *hidden_lock = hide;
         drop(hidden_lock);
@@ -1196,7 +1196,7 @@ impl UnownedWindow {
 
     pub(crate) fn set_ime_spot_physical(&self, x: i32, y: i32) {
         let _ = self.ime_sender
-            .lock()
+            .lock().unwrap()
             .send((self.xwindow, x as i16, y as i16));
     }
 

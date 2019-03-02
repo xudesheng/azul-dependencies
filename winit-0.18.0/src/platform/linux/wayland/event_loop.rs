@@ -16,8 +16,6 @@ use sctk::reexports::client::protocol::{
 use sctk::reexports::client::{ConnectError, Display, EventQueue, GlobalEvent, Proxy};
 use sctk::Environment;
 
-use sctk::reexports::client::protocol::wl_display::RequestsTrait as DisplayRequests;
-use sctk::reexports::client::protocol::wl_surface::RequestsTrait;
 
 use ModifiersState;
 
@@ -126,7 +124,7 @@ impl EventsLoop {
         let env = Environment::from_display_with_cb(
             &display,
             &mut event_queue,
-            move |event, registry| { 
+            move |event, registry| {
                 seat_manager.receive(event, registry)
             },
         ).unwrap();
@@ -287,8 +285,6 @@ struct SeatManager {
 
 impl SeatManager {
     fn receive(&mut self, evt: GlobalEvent, registry: Proxy<wl_registry::WlRegistry>) {
-        use self::wl_registry::RequestsTrait as RegistryRequests;
-        use self::wl_seat::RequestsTrait as SeatRequests;
         match evt {
             GlobalEvent::New {
                 id,
@@ -359,7 +355,6 @@ impl SeatData {
                 if !capabilities.contains(wl_seat::Capability::Pointer) {
                     if let Some(pointer) = self.pointer.take() {
                         if pointer.version() >= 3 {
-                            use self::wl_pointer::RequestsTrait;
                             pointer.release();
                         }
                     }
@@ -377,7 +372,6 @@ impl SeatData {
                 if !capabilities.contains(wl_seat::Capability::Keyboard) {
                     if let Some(kbd) = self.keyboard.take() {
                         if kbd.version() >= 3 {
-                            use self::wl_keyboard::RequestsTrait;
                             kbd.release();
                         }
                     }
@@ -394,7 +388,6 @@ impl SeatData {
                 if !capabilities.contains(wl_seat::Capability::Touch) {
                     if let Some(touch) = self.touch.take() {
                         if touch.version() >= 3 {
-                            use self::wl_touch::RequestsTrait;
                             touch.release();
                         }
                     }
@@ -408,19 +401,16 @@ impl Drop for SeatData {
     fn drop(&mut self) {
         if let Some(pointer) = self.pointer.take() {
             if pointer.version() >= 3 {
-                use self::wl_pointer::RequestsTrait;
                 pointer.release();
             }
         }
         if let Some(kbd) = self.keyboard.take() {
             if kbd.version() >= 3 {
-                use self::wl_keyboard::RequestsTrait;
                 kbd.release();
             }
         }
         if let Some(touch) = self.touch.take() {
             if touch.version() >= 3 {
-                use self::wl_touch::RequestsTrait;
                 touch.release();
             }
         }

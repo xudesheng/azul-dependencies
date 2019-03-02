@@ -9,11 +9,11 @@ lazy_static! {
 }
 
 pub fn hint_is_supported(hint: ffi::Atom) -> bool {
-    (*SUPPORTED_HINTS.lock()).contains(&hint)
+    (*SUPPORTED_HINTS.lock().unwrap()).contains(&hint)
 }
 
 pub fn wm_name_is_one_of(names: &[&str]) -> bool {
-    if let Some(ref name) = *WM_NAME.lock() {
+    if let Some(ref name) = *WM_NAME.lock().unwrap() {
         names.contains(&name.as_str())
     } else {
         false
@@ -22,8 +22,8 @@ pub fn wm_name_is_one_of(names: &[&str]) -> bool {
 
 impl XConnection {
     pub fn update_cached_wm_info(&self, root: ffi::Window) {
-        *SUPPORTED_HINTS.lock() = self.get_supported_hints(root);
-        *WM_NAME.lock() = self.get_wm_name(root);
+        *SUPPORTED_HINTS.lock().unwrap() = self.get_supported_hints(root);
+        *WM_NAME.lock().unwrap() = self.get_wm_name(root);
     }
 
     fn get_supported_hints(&self, root: ffi::Window) -> Vec<ffi::Atom> {

@@ -9,7 +9,6 @@ use super::window::WindowStore;
 use sctk::reexports::client::Proxy;
 use sctk::reexports::client::protocol::wl_touch::{Event as TouchEvent, WlTouch};
 use sctk::reexports::client::protocol::wl_seat;
-use sctk::reexports::client::protocol::wl_seat::RequestsTrait as SeatRequests;
 
 struct TouchPoint {
     wid: WindowId,
