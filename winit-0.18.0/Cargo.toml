@@ -60,8 +60,8 @@ version = "1.0.1"
 path = "../percent-encoding-1.0.1"
 
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies.smithay-client-toolkit]
-version = "0.4.3"
-path = "../smithay-client-toolkit-0.4.3"
+version = "0.6.0"
+path = "../smithay-client-toolkit-0.6.0"
 
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies.wayland-client]
 version = "0.21.7"

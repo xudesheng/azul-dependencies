@@ -1,0 +1,46 @@
+[package]
+name = "smithay-client-toolkit"
+version = "0.6.0"
+authors = ["Victor Berger <victor.berger@m4x.org>"]
+documentation = "https://smithay.github.io/client-toolkit"
+repository = "https://github.com/smithay/client-toolkit"
+license = "MIT"
+categories = ["gui"]
+keywords = ["wayland", "client"]
+description = "Toolkit for making client wayland applications."
+
+[badges]
+travis-ci = { repository = "smithay/client-toolkit" }
+
+[dependencies.bitflags]
+version = "1.0"
+
+[dependencies.nix]
+version = "0.12.0" # 0.13 ???
+path = "../nix-0.12.0"
+
+[dependencies.dlib]
+version = "0.4.1"
+path = "../dlib-0.4.1"
+
+[dependencies.lazy_static]
+version = "1.2.0"
+path = "../lazy_static-1.2.0"
+
+[dependencies.memmap]
+version = "0.7.0"
+path = "../memmap-0.7.0"
+
+[dependencies.andrew]
+version = "0.1.4" # 0.2.0
+path = "../andrew-0.1.4"
+
+[dependencies.wayland-client]
+version = "0.21.7" # 0.23
+path = "../wayland-client-0.21.7"
+features = ["cursor"]
+
+[dependencies.wayland-protocols]
+version = "0.21.7" # 0.23
+path = "../wayland-protocols-0.21.7"
+features = ["client", "unstable_protocols"]
