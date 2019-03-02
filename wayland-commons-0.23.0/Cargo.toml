@@ -1,0 +1,21 @@
+[package]
+name = "wayland-commons"
+version = "0.23.0"
+authors = ["Victor Berger <victor.berger@m4x.org>"]
+repository = "https://github.com/smithay/wayland-rs"
+documentation = "https://smithay.github.io/wayland-rs/wayland_commons/"
+description = "Common types and structures used by wayland-client and wayland-server."
+license = "MIT"
+categories = ["gui", "api-bindings"]
+keywords = ["wayland"]
+
+[badges]
+travis-ci = { repository = "Smithay/wayland-rs" }
+
+[dependencies.nix]
+version = "0.12.0"
+path = "../nix-0.12.0"
+
+[dependencies.wayland-sys]
+version = "0.23.0"
+path = "../wayland-sys-0.23.0"
