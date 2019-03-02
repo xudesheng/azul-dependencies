@@ -71,12 +71,12 @@ impl<'a> Text<'a> {
         for glyph in glyphs {
             if let Some(bounding_box) = glyph.pixel_bounding_box() {
                 glyph.draw(|x, y, v| {
-                    let x = x as usize + self.pos.0 + bounding_box.min.x as usize;
-                    let y = y as usize + self.pos.1 + bounding_box.min.y as usize;
+                    let x = ((x as usize + self.pos.0) as i32 + bounding_box.min.x) as usize;
+                    let y = ((y as usize + self.pos.1) as i32 + bounding_box.min.y) as usize;
 
                     if x < canvas.width && y < canvas.height {
                         let mut color = self.color;
-                        color[3] = (f32::from(color[3]) * v) as u8;
+                        color[0] = (f32::from(color[0]) * v) as u8;
                         canvas.draw_point(x, y, color);
                     }
                 });
@@ -92,12 +92,24 @@ impl<'a> Text<'a> {
             .collect();
         let min_x = glyphs
             .first()
-            .map(|g| g.pixel_bounding_box().unwrap().min.x)
-            .unwrap();
+            .map(|g| {
+                if let Some(bb) = g.pixel_bounding_box() {
+                    bb.min.x
+                } else {
+                    g.position().x as i32
+                }
+            })
+            .unwrap_or(0);
         let max_x = glyphs
             .last()
-            .map(|g| g.pixel_bounding_box().unwrap().max.x)
-            .unwrap();
+            .map(|g| {
+                if let Some(bb) = g.pixel_bounding_box() {
+                    bb.max.x
+                } else {
+                    (g.position().x + g.unpositioned().h_metrics().advance_width) as i32
+                }
+            })
+            .unwrap_or(0);
         (max_x - min_x) as usize
     }
 }
