@@ -15,7 +15,7 @@ use sctk::reexports::client::protocol::{
 };
 use sctk::reexports::client::{ConnectError, Display, EventQueue, GlobalEvent, Proxy};
 use sctk::Environment;
-
+use sctk::wayland_client::protocol::wl_seat::WlSeat;
 
 use ModifiersState;
 
@@ -125,7 +125,7 @@ impl EventsLoop {
             &display,
             &mut event_queue,
             move |event, registry| {
-                seat_manager.receive(event, registry)
+                seat_manager.receive(event, registry.into())
             },
         ).unwrap();
 
@@ -293,6 +293,8 @@ impl SeatManager {
             } if interface == "wl_seat" =>
             {
                 use std::cmp::min;
+                use sctk::wayland_client::protocol::wl_registry::WlRegistry;
+                use sctk::wayland_client::protocol::wl_seat::WlSeat;
 
                 let mut seat_data = SeatData {
                     sink: self.sink.clone(),
@@ -303,8 +305,10 @@ impl SeatManager {
                     events_loop_proxy: self.events_loop_proxy.clone(),
                     modifiers_tracker: Arc::new(Mutex::new(ModifiersState::default())),
                 };
+                let registry: WlRegistry = registry.clone().into();
                 let seat = registry
                     .bind(min(version, 5), id, move |seat| {
+                        let seat: WlSeat = seat.into();
                         seat.implement(move |event, seat| {
                             seat_data.receive(event, seat)
                         }, ())
@@ -318,6 +322,8 @@ impl SeatManager {
                 if let Some(idx) = seats.iter().position(|&(i, _)| i == id) {
                     let (_, seat) = seats.swap_remove(idx);
                     if seat.version() >= 5 {
+                        use sctk::wayland_client::protocol::wl_seat::WlSeat;
+                        let seat: WlSeat = seat.clone().into();
                         seat.release();
                     }
                 }
@@ -337,6 +343,10 @@ struct SeatData {
     modifiers_tracker: Arc<Mutex<ModifiersState>>,
 }
 
+use sctk::wayland_client::protocol::wl_touch::WlTouch;
+use sctk::wayland_client::protocol::wl_pointer::WlPointer;
+use sctk::wayland_client::protocol::wl_keyboard::WlKeyboard;
+
 impl SeatData {
     fn receive(&mut self, evt: wl_seat::Event, seat: Proxy<wl_seat::WlSeat>) {
         match evt {
@@ -355,6 +365,7 @@ impl SeatData {
                 if !capabilities.contains(wl_seat::Capability::Pointer) {
                     if let Some(pointer) = self.pointer.take() {
                         if pointer.version() >= 3 {
+                            let pointer: WlPointer = pointer.into();
                             pointer.release();
                         }
                     }
@@ -372,6 +383,7 @@ impl SeatData {
                 if !capabilities.contains(wl_seat::Capability::Keyboard) {
                     if let Some(kbd) = self.keyboard.take() {
                         if kbd.version() >= 3 {
+                            let kbd: WlKeyboard = kbd.into();
                             kbd.release();
                         }
                     }
@@ -388,6 +400,7 @@ impl SeatData {
                 if !capabilities.contains(wl_seat::Capability::Touch) {
                     if let Some(touch) = self.touch.take() {
                         if touch.version() >= 3 {
+                            let touch: WlTouch = touch.into();
                             touch.release();
                         }
                     }
@@ -399,18 +412,22 @@ impl SeatData {
 
 impl Drop for SeatData {
     fn drop(&mut self) {
+
         if let Some(pointer) = self.pointer.take() {
             if pointer.version() >= 3 {
+                let pointer: WlPointer = pointer.into();
                 pointer.release();
             }
         }
         if let Some(kbd) = self.keyboard.take() {
             if kbd.version() >= 3 {
+                let kbd: WlKeyboard = kbd.into();
                 kbd.release();
             }
         }
         if let Some(touch) = self.touch.take() {
             if touch.version() >= 3 {
+                let touch: WlTouch = touch.into();
                 touch.release();
             }
         }
@@ -458,20 +475,25 @@ impl fmt::Debug for MonitorId {
     }
 }
 
+use sctk::wayland_client::protocol::wl_output::WlOutput;
+
 impl MonitorId {
     pub fn get_name(&self) -> Option<String> {
-        self.mgr.with_info(&self.proxy, |_, info| {
+        let wl_output: WlOutput = self.proxy.clone().into();
+        self.mgr.with_info(&wl_output, |_, info| {
             format!("{} ({})", info.model, info.make)
         })
     }
 
     #[inline]
     pub fn get_native_identifier(&self) -> u32 {
-        self.mgr.with_info(&self.proxy, |id, _| id).unwrap_or(0)
+        let wl_output: WlOutput = self.proxy.clone().into();
+        self.mgr.with_info(&wl_output, |id, _| id).unwrap_or(0)
     }
 
     pub fn get_dimensions(&self) -> PhysicalSize {
-        match self.mgr.with_info(&self.proxy, |_, info| {
+        let wl_output: WlOutput = self.proxy.clone().into();
+        match self.mgr.with_info(&wl_output, |_, info| {
             info.modes
                 .iter()
                 .find(|m| m.is_current)
@@ -483,16 +505,19 @@ impl MonitorId {
     }
 
     pub fn get_position(&self) -> PhysicalPosition {
+        let wl_output: WlOutput = self.proxy.clone().into();
         self.mgr
-            .with_info(&self.proxy, |_, info| info.location)
+            .with_info(&wl_output, |_, info| info.location)
             .unwrap_or((0, 0))
             .into()
     }
 
     #[inline]
     pub fn get_hidpi_factor(&self) -> i32 {
+        use sctk::wayland_client::protocol::wl_output::WlOutput;
+        let wl_output: WlOutput = self.proxy.clone().into();
         self.mgr
-            .with_info(&self.proxy, |_, info| info.scale_factor)
+            .with_info(&wl_output, |_, info| info.scale_factor)
             .unwrap_or(1)
     }
 }
@@ -501,7 +526,7 @@ pub fn get_primary_monitor(outputs: &OutputMgr) -> MonitorId {
     outputs.with_all(|list| {
         if let Some(&(_, ref proxy, _)) = list.first() {
             MonitorId {
-                proxy: proxy.clone(),
+                proxy: proxy.clone().into(),
                 mgr: outputs.clone(),
             }
         } else {
@@ -514,7 +539,7 @@ pub fn get_available_monitors(outputs: &OutputMgr) -> VecDeque<MonitorId> {
     outputs.with_all(|list| {
         list.iter()
             .map(|&(_, ref proxy, _)| MonitorId {
-                proxy: proxy.clone(),
+                proxy: proxy.clone().into(),
                 mgr: outputs.clone(),
             })
             .collect()

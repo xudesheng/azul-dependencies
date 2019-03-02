@@ -9,6 +9,8 @@ use super::window::WindowStore;
 use sctk::reexports::client::Proxy;
 use sctk::reexports::client::protocol::wl_touch::{Event as TouchEvent, WlTouch};
 use sctk::reexports::client::protocol::wl_seat;
+use sctk::wayland_client::protocol::wl_surface::WlSurface;
+use sctk::wayland_client::protocol::wl_seat::WlSeat;
 
 struct TouchPoint {
     wid: WindowId,
@@ -21,7 +23,10 @@ pub(crate) fn implement_touch(
     sink: Arc<Mutex<EventsLoopSink>>,
     store: Arc<Mutex<WindowStore>>,
 ) -> Proxy<WlTouch> {
+
     let mut pending_ids = Vec::new();
+    let seat: WlSeat = seat.clone().into();
+
     seat.get_touch(|touch| {
         touch.implement(move |evt, _| {
             let mut sink = sink.lock().unwrap();
@@ -30,7 +35,8 @@ pub(crate) fn implement_touch(
                 TouchEvent::Down {
                     surface, id, x, y, ..
                 } => {
-                    let wid = store.find_wid(&surface);
+                    let proxy: Proxy<WlSurface> = surface.into();
+                    let wid = store.find_wid(&proxy);
                     if let Some(wid) = wid {
                         sink.send_event(
                             WindowEvent::Touch(::Touch {
@@ -92,5 +98,5 @@ pub(crate) fn implement_touch(
                 },
             }
         }, ())
-    }).unwrap()
+    }).unwrap().into()
 }

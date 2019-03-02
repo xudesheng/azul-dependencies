@@ -9,6 +9,7 @@ use window::MonitorId as RootMonitorId;
 use sctk::window::{ConceptFrame, Event as WEvent, Window as SWindow};
 use sctk::reexports::client::{Display, Proxy};
 use sctk::reexports::client::protocol::{wl_seat, wl_surface, wl_output};
+use sctk::reexports::client::protocol::wl_display::WlDisplay;
 use sctk::output::OutputMgr;
 
 use super::{make_wid, EventsLoop, MonitorId, WindowId};
@@ -21,7 +22,7 @@ pub struct Window {
     outputs: OutputMgr, // Access to info for all monitors
     size: Arc<Mutex<(u32, u32)>>,
     kill_switch: (Arc<Mutex<bool>>, Arc<Mutex<bool>>),
-    display: Arc<Display>,
+    display: Proxy<WlDisplay>,
     need_frame_refresh: Arc<Mutex<bool>>,
 }
 
@@ -34,14 +35,14 @@ impl Window {
         // monitor tracking
         let monitor_list = Arc::new(Mutex::new(MonitorList::new()));
 
-        let surface = evlp.env.compositor.create_surface(|surface| {
+        let surface = Proxy::from(evlp.env.compositor.create_surface(|surface| {
             let list = monitor_list.clone();
             let omgr = evlp.env.outputs.clone();
             let window_store = evlp.store.clone();
             surface.implement(move |event, surface| match event {
                 wl_surface::Event::Enter { output } => {
                     let dpi_change = list.lock().unwrap().add_output(MonitorId {
-                        proxy: output,
+                        proxy: output.into(),
                         mgr: omgr.clone(),
                     });
                     if let Some(dpi) = dpi_change {
@@ -53,7 +54,7 @@ impl Window {
                     }
                 },
                 wl_surface::Event::Leave { output } => {
-                    let dpi_change = list.lock().unwrap().del_output(&output);
+                    let dpi_change = list.lock().unwrap().del_output(&output.into());
                     if let Some(dpi) = dpi_change {
                         if surface.version() >= 3 {
                             // without version 3 we can't be dpi aware
@@ -63,13 +64,13 @@ impl Window {
                     }
                 }
             }, ())
-        }).unwrap();
+        }).unwrap());
 
         let window_store = evlp.store.clone();
         let my_surface = surface.clone();
         let mut frame = SWindow::<ConceptFrame>::init_from_env(
             &evlp.env,
-            surface.clone(),
+            surface.clone().into(),
             (width, height),
             move |event| match event {
                 WEvent::Configure { new_size, .. } => {
@@ -105,7 +106,9 @@ impl Window {
         ).unwrap();
 
         for &(_, ref seat) in evlp.seats.lock().unwrap().iter() {
-            frame.new_seat(seat);
+            use sctk::wayland_client::protocol::wl_seat::WlSeat;
+            let seat: WlSeat = seat.clone().into();
+            frame.new_seat(&seat);
         }
 
         // Check for fullscreen requirements
@@ -113,7 +116,9 @@ impl Window {
             inner: PlatformMonitorId::Wayland(ref monitor_id),
         }) = attributes.fullscreen
         {
-            frame.set_fullscreen(Some(&monitor_id.proxy));
+            use sctk::wayland_client::protocol::wl_output::WlOutput;
+            let wl_output: WlOutput = monitor_id.proxy.clone().into();
+            frame.set_fullscreen(Some(&wl_output));
         } else if attributes.maximized {
             frame.set_maximized();
         }
@@ -143,10 +148,13 @@ impl Window {
             current_dpi: 1,
             new_dpi: None,
         });
+
         evlp.evq.borrow_mut().sync_roundtrip().unwrap();
+        let display: Display = *evlp.display.clone();
+        let display: WlDisplay = *display;
 
         Ok(Window {
-            display: evlp.display.clone(),
+            display: display.into(),
             surface: surface,
             frame: frame,
             monitors: monitor_list,
@@ -253,7 +261,7 @@ impl Window {
             self.frame
                 .lock()
                 .unwrap()
-                .set_fullscreen(Some(&monitor_id.proxy));
+                .set_fullscreen(Some(&monitor_id.proxy.into()));
         } else {
             self.frame.lock().unwrap().unset_fullscreen();
         }
@@ -279,8 +287,8 @@ impl Window {
         Err("Setting the cursor position is not yet possible on Wayland.".to_owned())
     }
 
-    pub fn get_display(&self) -> &Display {
-        &*self.display
+    pub fn get_display(&self) -> &Proxy<WlDisplay> {
+        &self.display
     }
 
     pub fn get_surface(&self) -> &Proxy<wl_surface::WlSurface> {
@@ -351,9 +359,11 @@ impl WindowStore {
         let mut pruned = Vec::new();
         self.windows.retain(|w| {
             if *w.kill_switch.lock().unwrap() {
+                use sctk::wayland_client::protocol::wl_surface::WlSurface;
                 // window is dead, cleanup
                 pruned.push(make_wid(&w.surface));
-                w.surface.destroy();
+                let surface: WlSurface = w.surface.into();
+                surface.destroy();
                 false
             } else {
                 true
@@ -365,7 +375,9 @@ impl WindowStore {
     pub fn new_seat(&self, seat: &Proxy<wl_seat::WlSeat>) {
         for window in &self.windows {
             if let Some(w) = window.frame.upgrade() {
-                w.lock().unwrap().new_seat(seat);
+                use sctk::wayland_client::protocol::wl_seat::WlSeat;
+                let seat: WlSeat = seat.clone().into();
+                w.lock().unwrap().new_seat(&seat);
             }
         }
     }

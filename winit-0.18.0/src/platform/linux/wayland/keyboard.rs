@@ -7,6 +7,8 @@ use sctk::keyboard::{
 use sctk::reexports::client::protocol::wl_keyboard;
 use sctk::reexports::client::Proxy;
 use sctk::reexports::client::protocol::wl_seat;
+use sctk::wayland_client::protocol::wl_surface::WlSurface;
+use sctk::wayland_client::protocol::wl_seat::WlSeat;
 
 use {ElementState, KeyboardInput, ModifiersState, VirtualKeyCode, WindowEvent};
 
@@ -23,12 +25,15 @@ pub fn init_keyboard(
     let repeat_target = target.clone();
     let my_modifiers = modifiers_tracker.clone();
     // }
+
+    let seat: WlSeat = seat.clone().into();
     let ret = map_keyboard_auto_with_repeat(
-        seat,
+        &seat,
         KeyRepeatKind::System,
         move |evt: KbEvent, _| match evt {
             KbEvent::Enter { surface, .. } => {
-                let wid = make_wid(&surface);
+                let proxy: Proxy<WlSurface> = surface.into();
+                let wid = make_wid(&proxy);
                 my_sink
                     .lock()
                     .unwrap()
@@ -36,7 +41,8 @@ pub fn init_keyboard(
                 *target.lock().unwrap() = Some(wid);
             }
             KbEvent::Leave { surface, .. } => {
-                let wid = make_wid(&surface);
+                let proxy: Proxy<WlSurface> = surface.into();
+                let wid = make_wid(&proxy);
                 my_sink
                     .lock()
                     .unwrap()
@@ -113,7 +119,7 @@ pub fn init_keyboard(
     );
 
     match ret {
-        Ok(keyboard) => keyboard,
+        Ok(keyboard) => keyboard.into(),
         Err(_) => {
             // This is a fallback impl if libxkbcommon was not available
             // This case should probably never happen, as most wayland
@@ -126,10 +132,14 @@ pub fn init_keyboard(
             let mut target = None;
             let my_sink = sink;
             // }
+            use sctk::wayland_client::protocol::wl_seat::WlSeat;
+
+            let seat: WlSeat = seat.clone().into();
             seat.get_keyboard(|keyboard| {
                 keyboard.implement(move |evt, _| match evt {
                     wl_keyboard::Event::Enter { surface, .. } => {
-                        let wid = make_wid(&surface);
+                        let proxy: Proxy<WlSurface> = surface.into();
+                        let wid = make_wid(&proxy);
                         my_sink
                             .lock()
                             .unwrap()
@@ -137,7 +147,8 @@ pub fn init_keyboard(
                         target = Some(wid);
                     }
                     wl_keyboard::Event::Leave { surface, .. } => {
-                        let wid = make_wid(&surface);
+                        let proxy: Proxy<WlSurface> = surface.into();
+                        let wid = make_wid(&proxy);
                         my_sink
                             .lock()
                             .unwrap()
@@ -166,7 +177,7 @@ pub fn init_keyboard(
                     }
                     _ => (),
                 }, ())
-            }).unwrap()
+            }).unwrap().into()
         }
     }
 }

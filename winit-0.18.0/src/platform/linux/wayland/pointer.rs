@@ -17,10 +17,15 @@ pub fn implement_pointer(
     store: Arc<Mutex<WindowStore>>,
     modifiers_tracker: Arc<Mutex<ModifiersState>>,
 ) -> Proxy<WlPointer> {
+    use sctk::wayland_client::protocol::wl_seat::WlSeat;
+    use sctk::wayland_client::protocol::wl_surface::WlSurface;
+
     let mut mouse_focus = None;
     let mut axis_buffer = None;
     let mut axis_discrete_buffer = None;
     let mut axis_state = TouchPhase::Ended;
+
+    let seat: WlSeat = seat.clone().into();
 
     seat.get_pointer(|pointer| {
         pointer.implement(move |evt, pointer| {
@@ -33,7 +38,9 @@ pub fn implement_pointer(
                     surface_y,
                     ..
                 } => {
-                    let wid = store.find_wid(&surface);
+
+                    let proxy: Proxy<WlSurface> = surface.into();
+                    let wid = store.find_wid(&proxy);
                     if let Some(wid) = wid {
                         mouse_focus = Some(wid);
                         sink.send_event(
@@ -53,8 +60,10 @@ pub fn implement_pointer(
                     }
                 }
                 PtrEvent::Leave { surface, .. } => {
+
                     mouse_focus = None;
-                    let wid = store.find_wid(&surface);
+                    let proxy: Proxy<WlSurface> = surface.into();
+                    let wid = store.find_wid(&proxy);
                     if let Some(wid) = wid {
                         sink.send_event(
                             WindowEvent::CursorLeft {
@@ -184,5 +193,5 @@ pub fn implement_pointer(
                 }
             }
         }, ())
-    }).unwrap()
+    }).unwrap().into()
 }

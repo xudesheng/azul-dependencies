@@ -287,7 +287,7 @@ impl UnownedWindow {
                         max_dimensions = Some(dimensions.into());
                         min_dimensions = Some(dimensions.into());
 
-                        let mut shared_state_lock = window.shared_state.lock().unwrap().unwrap();
+                        let mut shared_state_lock = window.shared_state.lock().unwrap();
                         shared_state_lock.min_dimensions = window_attrs.min_dimensions;
                         shared_state_lock.max_dimensions = window_attrs.max_dimensions;
                     }
@@ -515,14 +515,14 @@ impl UnownedWindow {
         match monitor {
             None => {
                 let flusher = self.set_fullscreen_hint(false);
-                if let Some(position) = self.shared_state.lock().unwrap().unwrap().restore_position.take() {
+                if let Some(position) = self.shared_state.lock().unwrap().restore_position.take() {
                     self.set_position_inner(position.0, position.1).queue();
                 }
                 flusher
             },
             Some(RootMonitorId { inner: PlatformMonitorId::X(monitor) }) => {
                 let window_position = self.get_position_physical();
-                self.shared_state.lock().unwrap().unwrap().restore_position = window_position;
+                self.shared_state.lock().unwrap().restore_position = window_position;
                 let monitor_origin: (i32, i32) = monitor.get_position().into();
                 self.set_position_inner(monitor_origin.0, monitor_origin.1).queue();
                 self.set_fullscreen_hint(true)
@@ -551,14 +551,14 @@ impl UnownedWindow {
     #[inline]
     pub fn get_current_monitor(&self) -> X11MonitorId {
         let monitor = self.shared_state
-            .lock().unwrap().unwrap()
+            .lock().unwrap()
             .last_monitor
             .as_ref()
             .cloned();
         monitor
             .unwrap_or_else(|| {
                 let monitor = self.xconn.get_monitor_for_window(self.get_rect()).to_owned();
-                self.shared_state.lock().unwrap().unwrap().last_monitor = Some(monitor.clone());
+                self.shared_state.lock().unwrap().last_monitor = Some(monitor.clone());
                 monitor
             })
     }
@@ -709,7 +709,7 @@ impl UnownedWindow {
     }
 
     pub(crate) fn get_position_physical(&self) -> Option<(i32, i32)> {
-        let extents = (*self.shared_state.lock()).frame_extents.clone();
+        let extents = (*self.shared_state.lock().unwrap()).frame_extents.clone();
         if let Some(extents) = extents {
             self.get_inner_position_physical()
                 .map(|(x, y)| extents.inner_pos_to_outer(x, y))
@@ -721,7 +721,7 @@ impl UnownedWindow {
 
     #[inline]
     pub fn get_position(&self) -> Option<LogicalPosition> {
-        let extents = (*self.shared_state.lock()).frame_extents.clone();
+        let extents = (*self.shared_state.lock().unwrap()).frame_extents.clone();
         if let Some(extents) = extents {
             self.get_inner_position()
                 .map(|logical| extents.inner_pos_to_outer_logical(logical, self.get_hidpi_factor()))
@@ -747,7 +747,7 @@ impl UnownedWindow {
         // There are a few WMs that set client area position rather than window position, so
         // we'll translate for consistency.
         if util::wm_name_is_one_of(&["Enlightenment", "FVWM"]) {
-            let extents = (*self.shared_state.lock()).frame_extents.clone();
+            let extents = (*self.shared_state.lock().unwrap()).frame_extents.clone();
             if let Some(extents) = extents {
                 x += extents.frame_extents.left as i32;
                 y += extents.frame_extents.top as i32;
