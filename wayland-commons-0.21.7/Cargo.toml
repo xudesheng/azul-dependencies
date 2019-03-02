@@ -20,14 +20,18 @@ keywords = ["wayland"]
 categories = ["gui", "api-bindings"]
 license = "MIT"
 repository = "https://github.com/smithay/wayland-rs"
+
 [dependencies.nix]
-version = "0.11"
+version = "0.12.0"
+path = "../nix-0.12.0"
 
 [dependencies.wayland-sys]
 version = "0.21.7"
+path = "../wayland-sys-0.21.7"
 optional = true
 
 [features]
 native_lib = ["wayland-sys"]
+
 [badges.travis-ci]
 repository = "Smithay/wayland-rs"

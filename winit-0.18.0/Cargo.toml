@@ -51,10 +51,6 @@ optional = true
 [features]
 icon_loading = ["image"]
 
-[target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies.parking_lot]
-version = "0.6.4"
-path = "../parking_lot-0.6.4"
-
 [target."cfg(any(target_os = \"linux\", target_os = \"dragonfly\", target_os = \"freebsd\", target_os = \"openbsd\", target_os = \"netbsd\"))".dependencies.percent-encoding]
 version = "1.0.1"
 path = "../percent-encoding-1.0.1"

@@ -19,13 +19,16 @@ documentation = "https://docs.rs/memmap"
 keywords = ["mmap", "memory-map", "io", "file"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/danburkert/memmap-rs"
-[dev-dependencies.tempdir]
-version = "0.3"
+
 [target."cfg(unix)".dependencies.libc]
-version = "0.2"
+version = "0.2.45"
+path = "../libc-0.2.45"
+
 [target."cfg(windows)".dependencies.winapi]
-version = "0.3"
+version = "0.3.6"
+path = "../winapi-0.3.6"
 features = ["basetsd", "handleapi", "memoryapi", "minwindef", "std", "sysinfoapi"]
+
 [badges.appveyor]
 repository = "danburkert/mmap"
 

@@ -13,7 +13,8 @@ description = "Toolkit for making client wayland applications."
 travis-ci = { repository = "smithay/client-toolkit" }
 
 [dependencies.bitflags]
-version = "1.0"
+version = "1.0.4"
+path = "../bitflags-1.0.4"
 
 [dependencies.nix]
 version = "0.12.0" # 0.13 ???
@@ -36,11 +37,9 @@ version = "0.1.4" # 0.2.0
 path = "../andrew-0.1.4"
 
 [dependencies.wayland-client]
-version = "0.21.7" # 0.23
-path = "../wayland-client-0.21.7"
+version = "0.23" # 0.23
 features = ["cursor"]
 
 [dependencies.wayland-protocols]
-version = "0.21.7" # 0.23
-path = "../wayland-protocols-0.21.7"
+version = "0.23" # 0.23
 features = ["client", "unstable_protocols"]

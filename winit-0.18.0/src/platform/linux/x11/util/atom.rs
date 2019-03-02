@@ -3,7 +3,7 @@ use std::ffi::{CStr, CString};
 use std::fmt::Debug;
 use std::os::raw::*;
 
-use parking_lot::Mutex;
+use std::sync::Mutex;
 
 use super::*;
 

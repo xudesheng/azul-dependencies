@@ -5,7 +5,7 @@ use std::path::Path;
 use std::sync::Arc;
 
 use libc;
-use parking_lot::Mutex;
+use std::sync::Mutex;
 
 use {Icon, MouseCursor, WindowAttributes};
 use CreationError::{self, OsError};

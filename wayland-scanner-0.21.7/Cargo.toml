@@ -20,7 +20,10 @@ keywords = ["wayland", "codegen"]
 categories = ["gui", "api-bindings"]
 license = "MIT"
 repository = "https://github.com/smithay/wayland-rs"
+
 [dependencies.xml-rs]
-version = ">=0.7, <0.9"
+version = "0.8.0"
+path = "../xml-rs-0.8.0"
+
 [badges.travis-ci]
 repository = "Smithay/wayland-rs"

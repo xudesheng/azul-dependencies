@@ -6,7 +6,7 @@ use std::ffi::CStr;
 use std::os::raw::*;
 use std::sync::Arc;
 
-use parking_lot::Mutex;
+use std::sync::Mutex;
 use sctk::reexports::client::ConnectError;
 
 use {
@@ -363,7 +363,7 @@ unsafe extern "C" fn x_error_callback(
     display: *mut x11::ffi::Display,
     event: *mut x11::ffi::XErrorEvent,
 ) -> c_int {
-    let xconn_lock = X11_BACKEND.lock();
+    let xconn_lock = X11_BACKEND.lock().unwrap();
     if let Ok(ref xconn) = *xconn_lock {
         let mut buf: [c_char; 1024] = mem::uninitialized();
         (xconn.xlib.XGetErrorText)(
@@ -383,7 +383,7 @@ unsafe extern "C" fn x_error_callback(
 
         eprintln!("[winit X11 error] {:#?}", error);
 
-        *xconn.latest_error.lock() = Some(error);
+        *xconn.latest_error.lock().unwrap() = Some(error);
     }
     // Fun fact: this return value is completely ignored.
     0
@@ -444,7 +444,7 @@ impl EventsLoop {
 
     pub fn new_x11() -> Result<EventsLoop, XNotSupported> {
         X11_BACKEND
-            .lock()
+            .lock().unwrap()
             .as_ref()
             .map(Arc::clone)
             .map(x11::EventsLoop::new)

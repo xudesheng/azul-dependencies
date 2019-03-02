@@ -3,7 +3,7 @@ use std::fmt;
 use std::error::Error;
 
 use libc;
-use parking_lot::Mutex;
+use std::sync::Mutex;
 
 use super::ffi;
 

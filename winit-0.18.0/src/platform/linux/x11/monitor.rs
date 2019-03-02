@@ -1,6 +1,6 @@
 use std::os::raw::*;
 
-use parking_lot::Mutex;
+use std::sync::Mutex;
 
 use {PhysicalPosition, PhysicalSize};
 use super::{util, XConnection, XError};
@@ -37,7 +37,7 @@ fn version_is_at_least(major: c_int, minor: c_int) -> bool {
 
 pub fn invalidate_cached_monitor_list() -> Option<Vec<MonitorId>> {
     // We update this lazily.
-    (*MONITORS.lock()).take()
+    (*MONITORS.lock().unwrap()).take()
 }
 
 #[derive(Debug, Clone)]

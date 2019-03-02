@@ -21,13 +21,8 @@ keywords = ["line", "drawing", "bresenham", "sight", "game"]
 categories = ["algorithms", "games"]
 license = "MIT"
 repository = "https://github.com/expenses/line_drawing"
+
 [dependencies.num-traits]
-version = "0"
-[dev-dependencies.bresenham]
-version = "0"
+version = "0.2.6"
+path = "../num-traits-0.2.6"
 
-[dev-dependencies.image]
-version = "0"
-
-[dev-dependencies.rand]
-version = "0"
