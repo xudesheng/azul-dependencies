@@ -9,13 +9,27 @@ keywords = ["draw", "buffer", "shapes", "lines", "pixels"]
 categories = ["rendering", "multimedia::images"]
 license = "MIT"
 
-[dependencies]
-line_drawing = "0.7.0"
-bitflags = "1.0.3"
-rusttype = "0.7.1"
-xdg = "2.1.0"
-xml-rs = "0.8.0"
-walkdir = "2.0"
+[dependencies.bitflags]
+version = "1.0.4"
+path = "../bitflags-1.0.4"
 
-[dev-dependencies]
-smithay-client-toolkit = "0.4.0"
+[dependencies.line_drawing]
+version = "0.7.0"
+path = "../line_drawing-0.7.0"
+
+[dependencies.rusttype]
+version = "0.7.3"
+path = "../rusttype-0.7.3"
+
+[dependencies.walkdir]
+version = "2.0"
+path = "../walkdir-2.2.7"
+
+[dependencies.xdg]
+version = "2.2.0"
+path = "../xdg-2.2.0"
+
+[dependencies.xml-rs]
+version = "0.8.0"
+path = "../xml-rs-0.8.0"
+
