@@ -415,9 +415,9 @@ impl FontContext {
                     y_offset,
                     extra_strikes as f64,
                 );
-                if metrics.rasterized_width == 0 || metrics.rasterized_height == 0 {
-                    None
-                } else {
+                // if metrics.rasterized_width == 0 || metrics.rasterized_height == 0 {
+                //     None
+                // } else {
                     Some(GlyphDimensions {
                         left: metrics.rasterized_left,
                         top: metrics.rasterized_ascent,
@@ -425,7 +425,7 @@ impl FontContext {
                         height: metrics.rasterized_height,
                         advance: metrics.advance,
                     })
-                }
+                // }
             })
     }
 

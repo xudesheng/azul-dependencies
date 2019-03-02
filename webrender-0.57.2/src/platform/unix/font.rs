@@ -490,6 +490,7 @@ impl FontContext {
                 }
             }
         }
+
         Some(GlyphDimensions {
             left,
             top,

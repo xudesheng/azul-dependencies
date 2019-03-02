@@ -343,11 +343,11 @@ impl FontContext {
         let width = (bounds.right - bounds.left) as i32;
         let height = (bounds.bottom - bounds.top) as i32;
 
-        // Alpha texture bounds can sometimes return an empty rect
-        // Such as for spaces
-        if width == 0 || height == 0 {
-            return None;
-        }
+        // // Alpha texture bounds can sometimes return an empty rect
+        // // Such as for spaces
+        // if width == 0 || height == 0 {
+        //     return None;
+        // }
 
         let face = self.get_font_face(font);
         face.get_design_glyph_metrics(&[key.index() as u16], false)
