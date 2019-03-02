@@ -10,5 +10,6 @@ repository = "https://github.com/Daggerbot/osmesa-rs.git"
 name = "osmesa_sys"
 path = "lib.rs"
 
-[dependencies]
-shared_library = "0.1"
+[dependencies.shared_library]
+version = "0.1.9"
+path = "../shared_library-0.1.9"

@@ -10,6 +10,10 @@ license=  "MIT / Apache-2.0"
 [lib]
 name = "fontconfig"
 
-[dependencies]
-servo-fontconfig-sys = "4.0.0"
-libc = "0.2"
+[dependencies.libc]
+version = "0.2.45"
+path = "../libc-0.2.45"
+
+[dependencies.servo-fontconfig-sys]
+version = "4.0.7"
+path = "../servo-fontconfig-sys-4.0.7"

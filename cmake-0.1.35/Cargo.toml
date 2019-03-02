@@ -21,5 +21,7 @@ readme = "README.md"
 keywords = ["build-dependencies"]
 license = "MIT/Apache-2.0"
 repository = "https://github.com/alexcrichton/cmake-rs"
+
 [dependencies.cc]
-version = "1.0"
+version = "1.0.26"
+path = "../cc-1.0.26"

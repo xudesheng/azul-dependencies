@@ -37,7 +37,7 @@ time = { version = "0.1.40", path = "../time-0.1.40" }
 webrender_api = { version = "0.57.2", path = "../webrender_api-0.57.2" }
 
 [target.'cfg(any(target_os = "android", all(unix, not(target_os = "macos"))))'.dependencies]
-freetype = { version = "0.4", default-features = false }
+freetype = { version = "0.4.1", path = "../freetype-0.4.1", default-features = false }
 
 [target.'cfg(target_os = "windows")'.dependencies]
 dwrote = { version = "0.6.3", path = "../dwrote-0.6.3", default-features = false }

@@ -22,23 +22,23 @@ readme = "README.md"
 keywords = ["xcb", "window", "xlib", "x11", "opengl"]
 license = "MIT"
 repository = "https://github.com/rtbo/rust-xcb"
+
 [dependencies.libc]
-version = "0.2"
+version = "0.2.45"
+path = "../libc-0.2.45"
 
 [dependencies.log]
-version = "0.4"
+version = "0.4.6"
+path = "../log-0.4.6"
 
-[dependencies.x11]
-version = "2.3"
-features = ["xlib"]
-optional = true
 [build-dependencies.libc]
-version = "0.2"
+version = "0.2.45"
+path = "../libc-0.2.45"
 
 [features]
 composite = ["xfixes"]
 damage = ["xfixes"]
-debug_all = ["thread", "composite", "damage", "dpms", "dri2", "dri3", "glx", "randr", "record", "render", "res", "screensaver", "shape", "shm", "xevie", "xf86dri", "xfixes", "xinerama", "xkb", "xprint", "xselinux", "xtest", "xvmc", "xv", "xlib_xcb"]
+debug_all = ["thread", "composite", "damage", "dpms", "dri2", "dri3", "glx", "randr", "record", "render", "res", "screensaver", "shape", "shm", "xevie", "xf86dri", "xfixes", "xinerama", "xkb", "xprint", "xselinux", "xtest", "xvmc", "xv"]
 dpms = []
 dri2 = []
 dri3 = []
@@ -61,7 +61,6 @@ xfixes = ["render", "shape"]
 xinerama = []
 xinput = ["xfixes"]
 xkb = []
-xlib_xcb = ["x11/xlib"]
 xprint = []
 xselinux = []
 xtest = []
