@@ -25,7 +25,6 @@ stb_truetype            = { version = "0.2.2",  path = "./stb_truetype-0.2.2",  
 fern                    = { version = "0.5.7",  path = "./fern-0.5.7",                  default-features = false, optional = true }
 backtrace               = { version = "0.3.12", path = "./backtrace-0.3.12",            default-features = false, optional = true, features = ["std", "libunwind", "libbacktrace", "coresymbolication", "dladdr", "dbghelp"] }
 lyon                    = { version = "0.11.0", path = "./lyon-0.11.0",                 default-features = false, optional = true }
-twox-hash               = { version = "1.1.2",  path = "./twox-hash-1.1.2",             default-features = false, optional = true }
 usvg                    = { version = "0.3.0",  path = "./usvg-0.3.0",                  default-features = false, optional = true }
 image                   = { version = "0.20.1", path = "./image-0.20.1",                default-features = false, optional = true, features = ["gif_codec", "jpeg", "png_codec", "pnm", "tiff", "bmp"] }
 # servo-fontconfig-sys    = { version = "4.0.7",  path = "./servo-fontconfig-sys-4.0.7" }
@@ -68,12 +67,6 @@ svg_parsing = ["svg", "usvg"]
 icon_loading = ["glium/icon_loading"]
 # For serializing / deserializing CSS colors using serde
 serde_serialization = ["serde"]
-# twox-hash imports the rand crate, which takes a long time to compile
-# If azul isn't using XXHash, it uses the std-library provided hash algorithm
-#
-# The performance hit should be negligible, so this feature is turned off by
-# default. Maybe turn it on in release builds.
-faster-hashing = ["twox-hash"]
 # On some applications you might not want to load any images. For these purposes
 # the image crate can be disabled, to speed up compile times
 image_loading = ["image"]
