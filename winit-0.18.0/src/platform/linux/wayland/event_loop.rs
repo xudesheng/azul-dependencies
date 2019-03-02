@@ -92,7 +92,7 @@ impl EventsLoopProxy {
                 // Update the `EventsLoop`'s `pending_wakeup` flag.
                 wakeup.store(true, Ordering::Relaxed);
                 // Cause the `EventsLoop` to break from `dispatch` if it is currently blocked.
-                let _ = display.sync(|callback| callback.implement(|_, _| {}, ()));
+                let _ = display.sync(|callback| callback.implement_dummy());
                 display.flush().map_err(|_| EventsLoopClosed)?;
                 Ok(())
             }
@@ -295,6 +295,7 @@ impl SeatManager {
                 use std::cmp::min;
                 use sctk::wayland_client::protocol::wl_registry::WlRegistry;
                 use sctk::wayland_client::protocol::wl_seat::WlSeat;
+                use sctk::wayland_client::NewProxy;
 
                 let mut seat_data = SeatData {
                     sink: self.sink.clone(),
@@ -307,15 +308,15 @@ impl SeatManager {
                 };
                 let registry: WlRegistry = registry.clone().into();
                 let seat = registry
-                    .bind(min(version, 5), id, move |seat| {
-                        let seat: WlSeat = seat.into();
-                        seat.implement(move |event, seat| {
-                            seat_data.receive(event, seat)
-                        }, ())
+                    .bind(min(version, 5), id, move |seat: NewProxy<WlSeat>| {
+                        seat.implement_closure(move |event, seat: WlSeat| {
+                            seat_data.receive(event, seat.into())
+                        }, ()).into()
                     })
                     .unwrap();
-                self.store.lock().unwrap().new_seat(&seat);
-                self.seats.lock().unwrap().push((id, seat));
+                let proxy: Proxy<WlSeat> = seat.into();
+                self.store.lock().unwrap().new_seat(&proxy);
+                self.seats.lock().unwrap().push((id, proxy));
             }
             GlobalEvent::Removed { id, ref interface } if interface == "wl_seat" => {
                 let mut seats = self.seats.lock().unwrap();
@@ -406,6 +407,7 @@ impl SeatData {
                     }
                 }
             }
+            _ => { /* for future Wayland impls */ },
         }
     }
 }

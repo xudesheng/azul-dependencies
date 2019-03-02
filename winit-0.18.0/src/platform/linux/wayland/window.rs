@@ -27,41 +27,50 @@ pub struct Window {
 }
 
 impl Window {
+
     pub fn new(evlp: &EventsLoop, attributes: WindowAttributes) -> Result<Window, CreationError> {
+
+        use sctk::wayland_client::protocol::wl_surface::WlSurface;
+
         let (width, height) = attributes.dimensions.map(Into::into).unwrap_or((800, 600));
-        // Create the window
         let size = Arc::new(Mutex::new((width, height)));
 
-        // monitor tracking
         let monitor_list = Arc::new(Mutex::new(MonitorList::new()));
 
         let surface = Proxy::from(evlp.env.compositor.create_surface(|surface| {
             let list = monitor_list.clone();
             let omgr = evlp.env.outputs.clone();
             let window_store = evlp.store.clone();
-            surface.implement(move |event, surface| match event {
-                wl_surface::Event::Enter { output } => {
-                    let dpi_change = list.lock().unwrap().add_output(MonitorId {
-                        proxy: output.into(),
-                        mgr: omgr.clone(),
-                    });
-                    if let Some(dpi) = dpi_change {
-                        if surface.version() >= 3 {
-                            // without version 3 we can't be dpi aware
-                            window_store.lock().unwrap().dpi_change(&surface, dpi);
-                            surface.set_buffer_scale(dpi);
+            surface.implement_closure(move |event, surface: WlSurface| {
+                let surface = Proxy::from(surface);
+
+                match event {
+                    wl_surface::Event::Enter { output } => {
+                        let dpi_change = list.lock().unwrap().add_output(MonitorId {
+                            proxy: output.into(),
+                            mgr: omgr.clone(),
+                        });
+                        if let Some(dpi) = dpi_change {
+                            if surface.version() >= 3 {
+                                // without version 3 we can't be dpi aware
+                                window_store.lock().unwrap().dpi_change(&surface, dpi);
+                                let surface: WlSurface = surface.into();
+                                surface.set_buffer_scale(dpi);
+                            }
                         }
-                    }
-                },
-                wl_surface::Event::Leave { output } => {
-                    let dpi_change = list.lock().unwrap().del_output(&output.into());
-                    if let Some(dpi) = dpi_change {
-                        if surface.version() >= 3 {
-                            // without version 3 we can't be dpi aware
-                            window_store.lock().unwrap().dpi_change(&surface, dpi);
-                            surface.set_buffer_scale(dpi);
+                    },
+                    wl_surface::Event::Leave { output } => {
+                        let dpi_change = list.lock().unwrap().del_output(&output.into());
+                        if let Some(dpi) = dpi_change {
+                            if surface.version() >= 3 {
+                                // without version 3 we can't be dpi aware
+                                window_store.lock().unwrap().dpi_change(&surface, dpi);
+                                let surface: WlSurface = surface.into();
+                                surface.set_buffer_scale(dpi);
+                            }
                         }
-                    }
+                    },
+                    _ => { },
                 }
             }, ())
         }).unwrap());
@@ -150,8 +159,9 @@ impl Window {
         });
 
         evlp.evq.borrow_mut().sync_roundtrip().unwrap();
-        let display: Display = *evlp.display.clone();
-        let display: WlDisplay = *display;
+        use std::ops::Deref;
+
+        let display: WlDisplay = (&*evlp.display).deref().clone();
 
         Ok(Window {
             display: display.into(),
@@ -258,10 +268,12 @@ impl Window {
             inner: PlatformMonitorId::Wayland(ref monitor_id),
         }) = monitor
         {
+            use sctk::wayland_client::protocol::wl_output::WlOutput;
+            let wl_output: WlOutput = monitor_id.proxy.clone().into();
             self.frame
                 .lock()
                 .unwrap()
-                .set_fullscreen(Some(&monitor_id.proxy.into()));
+                .set_fullscreen(Some(&wl_output));
         } else {
             self.frame.lock().unwrap().unset_fullscreen();
         }
@@ -362,7 +374,7 @@ impl WindowStore {
                 use sctk::wayland_client::protocol::wl_surface::WlSurface;
                 // window is dead, cleanup
                 pruned.push(make_wid(&w.surface));
-                let surface: WlSurface = w.surface.into();
+                let surface: WlSurface = w.surface.clone().into();
                 surface.destroy();
                 false
             } else {

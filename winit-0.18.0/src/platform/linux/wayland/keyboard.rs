@@ -60,6 +60,7 @@ pub fn init_keyboard(
                     let state = match state {
                         wl_keyboard::KeyState::Pressed => ElementState::Pressed,
                         wl_keyboard::KeyState::Released => ElementState::Released,
+                        _ => { unimplemented!(); /* for future Wayland impls */ },
                     };
                     let vkcode = key_to_vkey(rawkey, keysym);
                     let mut guard = my_sink.lock().unwrap();
@@ -136,7 +137,7 @@ pub fn init_keyboard(
 
             let seat: WlSeat = seat.clone().into();
             seat.get_keyboard(|keyboard| {
-                keyboard.implement(move |evt, _| match evt {
+                keyboard.implement_closure(move |evt, _| match evt {
                     wl_keyboard::Event::Enter { surface, .. } => {
                         let proxy: Proxy<WlSurface> = surface.into();
                         let wid = make_wid(&proxy);
@@ -160,6 +161,7 @@ pub fn init_keyboard(
                             let state = match state {
                                 wl_keyboard::KeyState::Pressed => ElementState::Pressed,
                                 wl_keyboard::KeyState::Released => ElementState::Released,
+                                _ => { unimplemented!(); /* for future Wayland impls */ },
                             };
                             my_sink.lock().unwrap().send_event(
                                 WindowEvent::KeyboardInput {

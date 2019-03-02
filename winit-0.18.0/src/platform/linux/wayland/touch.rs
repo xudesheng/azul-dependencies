@@ -28,7 +28,7 @@ pub(crate) fn implement_touch(
     let seat: WlSeat = seat.clone().into();
 
     seat.get_touch(|touch| {
-        touch.implement(move |evt, _| {
+        touch.implement_closure(move |evt, _: WlTouch| {
             let mut sink = sink.lock().unwrap();
             let store = store.lock().unwrap();
             match evt {
@@ -96,6 +96,7 @@ pub(crate) fn implement_touch(
                         pt.wid,
                     );
                 },
+                _ => { /* Shape, Orientation or future Wayland impls */ },
             }
         }, ())
     }).unwrap().into()

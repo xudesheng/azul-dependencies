@@ -28,7 +28,7 @@ pub fn implement_pointer(
     let seat: WlSeat = seat.clone().into();
 
     seat.get_pointer(|pointer| {
-        pointer.implement(move |evt, pointer| {
+        pointer.implement_closure(move |evt, pointer: WlPointer| {
             let mut sink = sink.lock().unwrap();
             let store = store.lock().unwrap();
             match evt {
@@ -94,6 +94,7 @@ pub fn implement_pointer(
                         let state = match state {
                             wl_pointer::ButtonState::Pressed => ElementState::Pressed,
                             wl_pointer::ButtonState::Released => ElementState::Released,
+                            _ => { unimplemented!() /* for future Wayland impls */ }
                         };
                         let button = match button {
                             0x110 => MouseButton::Left,
@@ -115,6 +116,7 @@ pub fn implement_pointer(
                 }
                 PtrEvent::Axis { axis, value, .. } => {
                     if let Some(wid) = mouse_focus {
+                        let pointer: Proxy<WlPointer> = pointer.into();
                         if pointer.version() < 5 {
                             let (mut x, mut y) = (0.0, 0.0);
                             // old seat compatibility
@@ -122,6 +124,7 @@ pub fn implement_pointer(
                                 // wayland vertical sign convention is the inverse of winit
                                 wl_pointer::Axis::VerticalScroll => y -= value as f32,
                                 wl_pointer::Axis::HorizontalScroll => x += value as f32,
+                                _ => { /* for future Wayland impls */ }
                             }
                             sink.send_event(
                                 WindowEvent::MouseWheel {
@@ -138,6 +141,7 @@ pub fn implement_pointer(
                                 // wayland vertical sign convention is the inverse of winit
                                 wl_pointer::Axis::VerticalScroll => y -= value as f32,
                                 wl_pointer::Axis::HorizontalScroll => x += value as f32,
+                                _ => { /* for future Wayland impls */ }
                             }
                             axis_buffer = Some((x, y));
                             axis_state = match axis_state {
@@ -184,13 +188,15 @@ pub fn implement_pointer(
                         // wayland vertical sign convention is the inverse of winit
                         wl_pointer::Axis::VerticalScroll => y -= discrete,
                         wl_pointer::Axis::HorizontalScroll => x += discrete,
+                        _ => { /* for future Wayland impls */ },
                     }
                     axis_discrete_buffer = Some((x, y));
                     axis_state = match axis_state {
                         TouchPhase::Started | TouchPhase::Moved => TouchPhase::Moved,
                         _ => TouchPhase::Started,
                     }
-                }
+                },
+                _ => { /* for future Wayland impls */ },
             }
         }, ())
     }).unwrap().into()
