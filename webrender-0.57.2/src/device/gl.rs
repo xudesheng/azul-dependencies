@@ -13,7 +13,6 @@ use euclid::Transform3D;
 use gleam::gl;
 use internal_types::{FastHashMap, LayerIndex, RenderTargetInfo};
 use log::Level;
-use sha2::{Digest, Sha256};
 use smallvec::SmallVec;
 use std::borrow::Cow;
 use std::cell::{Cell, RefCell};
@@ -693,14 +692,11 @@ struct IBOId(gl::GLuint);
 
 #[derive(PartialEq, Eq, Hash, Debug, Clone, Default)]
 #[cfg_attr(feature = "serialize_program", derive(Deserialize, Serialize))]
-pub struct ProgramSourceDigest([u8; 32]);
+pub struct ProgramSourceDigest(u64);
 
 impl ::std::fmt::Display for ProgramSourceDigest {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        for byte in self.0.iter() {
-            f.write_fmt(format_args!("{:02x}", byte))?;
-        }
-        Ok(())
+        write!(f, "{:02x}", self.0)
     }
 }
 
@@ -717,6 +713,10 @@ impl ProgramSourceInfo {
         base_filename: &'static str,
         features: String,
     ) -> Self {
+
+        use std::collections::hash_map::DefaultHasher;
+        use std::hash::Hasher;
+
         // Compute the digest. Assuming the device has a `ProgramCache`, this
         // will always be needed, whereas the source is rarely needed. As such,
         // we compute the hash by walking the static strings in the same order
@@ -724,17 +724,17 @@ impl ProgramSourceInfo {
         // in the common case.
 
         // Construct the hasher.
-        let mut hasher = Sha256::new();
+        let mut hasher = DefaultHasher::new();
 
         // Hash the renderer name.
-        hasher.input(device.renderer_name.as_bytes());
+        device.renderer_name.as_bytes().into_iter().for_each(|b| hasher.write_u8(*b));
 
         // Hash the vertex shader.
         device.build_shader_string(
             &features,
             SHADER_KIND_VERTEX,
             &base_filename,
-            |s| hasher.input(s.as_bytes()),
+            |s| s.as_bytes().into_iter().for_each(|b| hasher.write_u8(*b)),
         );
 
         // Hash the fragment shader.
@@ -742,12 +742,11 @@ impl ProgramSourceInfo {
             &features,
             SHADER_KIND_FRAGMENT,
             base_filename,
-            |s| hasher.input(s.as_bytes()),
+            |s| s.as_bytes().into_iter().for_each(|b| hasher.write_u8(*b)),
         );
 
         // Finish.
-        let mut digest = ProgramSourceDigest::default();
-        digest.0.copy_from_slice(hasher.result().as_slice());
+        let digest = ProgramSourceDigest(hasher.finish());
 
         ProgramSourceInfo {
             base_filename,
