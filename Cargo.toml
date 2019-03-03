@@ -19,6 +19,7 @@ tinyfiledialogs         = { version = "3.3.5",  path = "./tinyfiledialogs-git@75
 clipboard2              = { version = "0.1.1",  path = "./clipboard2-0.1.1",            default-features = false }
 font-loader             = { version = "0.8.0",  path = "./fschutt.font-loader-0.8.0",   default-features = false }
 xmlparser               = { version = "0.6.1",  path = "./xmlparser-0.6.1",             default-features = false }
+harfbuzz-sys            = { version = "0.3.0",  path = "./harfbuzz-sys-0.3.0",          default-features = false }
 serde                   = { version = "1.0.80", path = "./serde-1.0.80",                default-features = false, optional = true }
 log                     = { version = "0.4.6",  path = "./log-0.4.6",                   default-features = false, optional = true }
 stb_truetype            = { version = "0.2.2",  path = "./stb_truetype-0.2.2",          default-features = false, optional = true }

@@ -12,6 +12,7 @@ pub extern crate tinyfiledialogs;
 pub extern crate clipboard2;
 pub extern crate font_loader;
 pub extern crate xmlparser;
+pub extern crate harfbuzz_sys;
 // pub extern crate freetype_sys; // TODO: links = "freetype" crate!
 // pub extern crate expat_sys; // TODO: links = "expat" crate!
 // pub extern crate fontconfig_sys; // TODO: links = "fontconfig_sys" crate!
