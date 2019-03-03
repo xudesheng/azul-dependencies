@@ -9,7 +9,6 @@ use api::{ImageDescriptor, ImageFormat, DirtyRect};
 use device::TextureFilter;
 use euclid::size2;
 use gpu_types::UvRectKind;
-use rayon::prelude::*;
 use std::sync::{Arc, MutexGuard};
 use platform::font::FontContext;
 use glyph_rasterizer::{FontInstance, FontContexts, GlyphKey};
@@ -31,7 +30,7 @@ impl FontContexts {
     }
 
     pub(in super) fn current_worker_id(&self) -> Option<usize> {
-        self.workers.current_thread_index()
+        Some(0)
     }
 }
 
@@ -100,35 +99,30 @@ impl GlyphRasterizer {
         let font_contexts = Arc::clone(&self.font_contexts);
         let glyph_tx = self.glyph_tx.clone();
 
-        // spawn an async task to get off of the render backend thread as early as
-        // possible and in that task use rayon's fork join dispatch to rasterize the
-        // glyphs in the thread pool.
-        self.workers.spawn(move || {
-            let jobs = glyphs
-                .par_iter()
-                .map(|key: &GlyphKey| {
-                    profile_scope!("glyph-raster");
-                    let mut context = font_contexts.lock_current_context();
-                    let job = GlyphRasterJob {
-                        key: key.clone(),
-                        result: context.rasterize_glyph(&font, key),
-                    };
+        let jobs = glyphs
+            .iter()
+            .map(|key: &GlyphKey| {
+                profile_scope!("glyph-raster");
+                let mut context = font_contexts.lock_current_context();
+                let job = GlyphRasterJob {
+                    key: key.clone(),
+                    result: context.rasterize_glyph(&font, key),
+                };
 
-                    // Sanity check.
-                    if let GlyphRasterResult::Bitmap(ref glyph) = job.result {
-                        let bpp = 4; // We always render glyphs in 32 bits RGBA format.
-                        assert_eq!(
-                            glyph.bytes.len(),
-                            bpp * (glyph.width * glyph.height) as usize
-                        );
-                    }
+                // Sanity check.
+                if let GlyphRasterResult::Bitmap(ref glyph) = job.result {
+                    let bpp = 4; // We always render glyphs in 32 bits RGBA format.
+                    assert_eq!(
+                        glyph.bytes.len(),
+                        bpp * (glyph.width * glyph.height) as usize
+                    );
+                }
 
-                    job
-                })
-                .collect();
+                job
+            })
+            .collect();
 
-            glyph_tx.send(GlyphRasterJobs { font, jobs }).unwrap();
-        });
+        glyph_tx.send(GlyphRasterJobs { font, jobs }).unwrap();
     }
 
     pub fn resolve_glyphs(

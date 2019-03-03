@@ -61,7 +61,6 @@ use prim_store::DeferredResolve;
 use profiler::{BackendProfileCounters, FrameProfileCounters, TimeProfileCounter,
                GpuProfileTag, RendererProfileCounters, RendererProfileTimers};
 use device::query::GpuProfiler;
-use rayon::{ThreadPool, ThreadPoolBuilder};
 use record::ApiRecordingReceiver;
 use render_backend::{FrameId, RenderBackend};
 use render_task::ClearMode;
@@ -1834,34 +1833,13 @@ impl Renderer {
         let debug_flags = DebugFlags::default();
         let payload_rx_for_backend = payload_rx.to_mpsc_receiver();
         let recorder = options.recorder;
-        let thread_listener = Arc::new(options.thread_listener);
-        let thread_listener_for_rayon_start = thread_listener.clone();
-        let thread_listener_for_rayon_end = thread_listener.clone();
-        let workers = options
-            .workers
-            .take()
-            .unwrap_or_else(|| {
-                let worker = ThreadPoolBuilder::new()
-                    .thread_name(|idx|{ format!("WRWorker#{}", idx) })
-                    .start_handler(move |idx| {
-                        register_thread_with_profiler(format!("WRWorker#{}", idx));
-                        if let Some(ref thread_listener) = *thread_listener_for_rayon_start {
-                            thread_listener.thread_started(&format!("WRWorker#{}", idx));
-                        }
-                    })
-                    .exit_handler(move |idx| {
-                        if let Some(ref thread_listener) = *thread_listener_for_rayon_end {
-                            thread_listener.thread_stopped(&format!("WRWorker#{}", idx));
-                        }
-                    })
-                    .build();
-                Arc::new(worker.unwrap())
-            });
+
         let sampler = options.sampler;
         let size_of_op = options.size_of_op;
         let namespace_alloc_by_client = options.namespace_alloc_by_client;
 
         let blob_image_handler = options.blob_image_handler.take();
+        let thread_listener = Arc::new(options.thread_listener);
         let thread_listener_for_render_backend = thread_listener.clone();
         let thread_listener_for_scene_builder = thread_listener.clone();
         let thread_listener_for_lp_scene_builder = thread_listener.clone();
@@ -1869,7 +1847,7 @@ impl Renderer {
         let rb_thread_name = format!("WRRenderBackend#{}", options.renderer_id.unwrap_or(0));
         let scene_thread_name = format!("WRSceneBuilder#{}", options.renderer_id.unwrap_or(0));
         let lp_scene_thread_name = format!("WRSceneBuilderLP#{}", options.renderer_id.unwrap_or(0));
-        let glyph_rasterizer = GlyphRasterizer::new(workers)?;
+        let glyph_rasterizer = GlyphRasterizer::new()?;
 
         let (scene_builder, scene_tx, scene_rx) = SceneBuilder::new(
             config,
@@ -4757,7 +4735,6 @@ pub struct RendererOptions {
     pub max_texture_size: Option<i32>,
     pub scatter_gpu_cache_updates: bool,
     pub upload_method: UploadMethod,
-    pub workers: Option<Arc<ThreadPool>>,
     pub blob_image_handler: Option<Box<BlobImageHandler>>,
     pub recorder: Option<Box<ApiRecordingReceiver>>,
     pub thread_listener: Option<Box<ThreadListener + Send + Sync>>,
@@ -4794,7 +4771,6 @@ impl Default for RendererOptions {
             // This is best as `Immediate` on Angle, or `Pixelbuffer(Dynamic)` on GL,
             // but we are unable to make this decision here, so picking the reasonable medium.
             upload_method: UploadMethod::PixelBuffer(VertexUsageHint::Stream),
-            workers: None,
             blob_image_handler: None,
             recorder: None,
             thread_listener: None,

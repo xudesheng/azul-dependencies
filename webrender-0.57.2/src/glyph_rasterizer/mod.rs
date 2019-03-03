@@ -11,7 +11,6 @@ use app_units::Au;
 use euclid::approxeq::ApproxEq;
 use internal_types::ResourceCacheError;
 use platform::font::FontContext;
-use rayon::ThreadPool;
 use std::cmp;
 use std::hash::{Hash, Hasher};
 use std::mem;
@@ -449,8 +448,6 @@ pub struct FontContexts {
     #[cfg(feature = "pathfinder")]
     pathfinder_context: Box<ThreadSafePathfinderFontContext>,
     // Stored here as a convenience to get the current thread index.
-    #[allow(dead_code)]
-    workers: Arc<ThreadPool>,
     locked_mutex: Mutex<bool>,
     locked_cond: Condvar,
 }
@@ -492,24 +489,22 @@ impl ForEach<FontContext> for Arc<FontContexts> {
 
         // Arc that can be safely moved into a spawn closure.
         let font_contexts = self.clone();
-        // Spawn a new thread on which to run the for-each off the main thread.
-        self.workers.spawn(move || {
-            // Lock the shared and worker contexts up front.
-            let mut locks = Vec::with_capacity(font_contexts.num_worker_contexts() + 1);
-            locks.push(font_contexts.lock_shared_context());
-            for i in 0 .. font_contexts.num_worker_contexts() {
-                locks.push(font_contexts.lock_context(Some(i)));
-            }
 
-            // Signal the locked condition now that all contexts are locked.
-            *font_contexts.locked_mutex.lock().unwrap() = true;
-            font_contexts.locked_cond.notify_all();
+        // Lock the shared and worker contexts up front.
+        let mut locks = Vec::with_capacity(font_contexts.num_worker_contexts() + 1);
+        locks.push(font_contexts.lock_shared_context());
+        for i in 0 .. font_contexts.num_worker_contexts() {
+            locks.push(font_contexts.lock_context(Some(i)));
+        }
 
-            // Now that everything is locked, proceed to processing each locked context.
-            for context in locks {
-                f(context);
-            }
-        });
+        // Signal the locked condition now that all contexts are locked.
+        *font_contexts.locked_mutex.lock().unwrap() = true;
+        font_contexts.locked_cond.notify_all();
+
+        // Now that everything is locked, proceed to processing each locked context.
+        for context in locks {
+            f(context);
+        }
 
         // Wait for locked condition before resuming. Safe to proceed thereafter
         // since any other thread that needs to use a FontContext will try to lock
@@ -521,8 +516,6 @@ impl ForEach<FontContext> for Arc<FontContexts> {
 }
 
 pub struct GlyphRasterizer {
-    #[allow(dead_code)]
-    workers: Arc<ThreadPool>,
     font_contexts: Arc<FontContexts>,
 
     // Maintain a set of glyphs that have been requested this
@@ -553,10 +546,10 @@ pub struct GlyphRasterizer {
 }
 
 impl GlyphRasterizer {
-    pub fn new(workers: Arc<ThreadPool>) -> Result<Self, ResourceCacheError> {
+    pub fn new() -> Result<Self, ResourceCacheError> {
         let (glyph_tx, glyph_rx) = channel();
 
-        let num_workers = workers.current_num_threads();
+        let num_workers = 1;
         let mut contexts = Vec::with_capacity(num_workers);
 
         let shared_context = FontContext::new()?;
@@ -570,7 +563,6 @@ impl GlyphRasterizer {
                 shared_context: Mutex::new(shared_context),
                 #[cfg(feature = "pathfinder")]
                 pathfinder_context: create_pathfinder_font_context()?,
-                workers: Arc::clone(&workers),
                 locked_mutex: Mutex::new(false),
                 locked_cond: Condvar::new(),
         };
@@ -580,7 +572,6 @@ impl GlyphRasterizer {
             pending_glyphs: 0,
             glyph_rx,
             glyph_tx,
-            workers,
             fonts_to_remove: Vec::new(),
             font_instances_to_remove: Vec::new(),
             next_gpu_glyph_cache_key: GpuGlyphCacheKey(0),
@@ -703,7 +694,6 @@ mod test_glyph_rasterizer {
         // This test loads a font from disc, the renders 4 requests containing
         // 50 glyphs each, deletes the font and waits for the result.
 
-        use rayon::ThreadPoolBuilder;
         use std::fs::File;
         use std::io::Read;
         use texture_cache::TextureCache;
@@ -721,14 +711,7 @@ mod test_glyph_rasterizer {
         use std::sync::Arc;
         use glyph_rasterizer::{FontInstance, GlyphKey, GlyphRasterizer};
 
-        let worker = ThreadPoolBuilder::new()
-            .thread_name(|idx|{ format!("WRWorker#{}", idx) })
-            .start_handler(move |idx| {
-                register_thread_with_profiler(format!("WRWorker#{}", idx));
-            })
-            .build();
-        let workers = Arc::new(worker.unwrap());
-        let mut glyph_rasterizer = GlyphRasterizer::new(workers).unwrap();
+        let mut glyph_rasterizer = GlyphRasterizer::new().unwrap();
         let mut glyph_cache = GlyphCache::new();
         let mut gpu_cache = GpuCache::new();
         let mut texture_cache = TextureCache::new_for_testing(2048, 1024);

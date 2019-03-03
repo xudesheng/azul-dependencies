@@ -174,7 +174,6 @@ extern crate pathfinder_partitioner;
 #[cfg(feature = "pathfinder")]
 extern crate pathfinder_path_utils;
 extern crate plane_split;
-extern crate rayon;
 #[cfg(feature = "ron")]
 extern crate ron;
 #[cfg(feature = "debugger")]
