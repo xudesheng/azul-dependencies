@@ -464,12 +464,6 @@ impl<V> VBO<V> {
     }
 }
 
-impl<T> Drop for VBO<T> {
-    fn drop(&mut self) {
-        debug_assert!(thread::panicking() || self.id == 0);
-    }
-}
-
 #[cfg_attr(feature = "replay", derive(Clone))]
 pub struct ExternalTexture {
     id: gl::GLuint,
@@ -605,12 +599,6 @@ impl Texture {
     }
 }
 
-impl Drop for Texture {
-    fn drop(&mut self) {
-        debug_assert!(thread::panicking() || self.id == 0);
-    }
-}
-
 pub struct Program {
     id: gl::GLuint,
     u_transform: gl::GLint,
@@ -625,26 +613,8 @@ impl Program {
     }
 }
 
-impl Drop for Program {
-    fn drop(&mut self) {
-        debug_assert!(
-            thread::panicking() || self.id == 0,
-            "renderer::deinit not called"
-        );
-    }
-}
-
 pub struct CustomVAO {
     id: gl::GLuint,
-}
-
-impl Drop for CustomVAO {
-    fn drop(&mut self) {
-        debug_assert!(
-            thread::panicking() || self.id == 0,
-            "renderer::deinit not called"
-        );
-    }
 }
 
 pub struct VAO {
@@ -656,26 +626,8 @@ pub struct VAO {
     owns_vertices_and_indices: bool,
 }
 
-impl Drop for VAO {
-    fn drop(&mut self) {
-        debug_assert!(
-            thread::panicking() || self.id == 0,
-            "renderer::deinit not called"
-        );
-    }
-}
-
 pub struct PBO {
     id: gl::GLuint,
-}
-
-impl Drop for PBO {
-    fn drop(&mut self) {
-        debug_assert!(
-            thread::panicking() || self.id == 0,
-            "renderer::deinit not called"
-        );
-    }
 }
 
 #[derive(PartialEq, Eq, Hash, Debug, Copy, Clone)]
@@ -905,13 +857,6 @@ struct SharedDepthTarget {
     rbo_id: RBOId,
     /// Reference count. When this drops to zero, the RBO is deleted.
     refcount: usize,
-}
-
-#[cfg(debug_assertions)]
-impl Drop for SharedDepthTarget {
-    fn drop(&mut self) {
-        debug_assert!(thread::panicking() || self.refcount == 0);
-    }
 }
 
 /// Describes for which texture formats to use the glTexStorage*
