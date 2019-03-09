@@ -431,10 +431,7 @@ impl Context {
         if ret == 0 {
             match egl.GetError() as u32 {
                 ffi::egl::CONTEXT_LOST => return Err(ContextError::ContextLost),
-                err => panic!(
-                    "eglMakeCurrent failed (eglGetError returned 0x{:x})",
-                    err
-                ),
+                err => return Err(ContextError::ContextError(err)),
             }
         } else {
             Ok(())

@@ -1070,6 +1070,8 @@ pub enum SwapBuffersError {
     /// sleep and wakes it up later. However any OpenGL implementation can theoretically lose the
     /// context at any time. Can only happen if calling `is_context_loss_possible()` returns true.
     ContextLost,
+    /// Other context error (usually something like EGL_BAD_MATCH).
+    ContextError(u32),
     /// The buffers have already been swapped.
     ///
     /// This error can be returned when `set_finish()` is called multiple times, or `finish()` is
@@ -1081,10 +1083,9 @@ impl Error for SwapBuffersError {
     fn description(&self) -> &str {
         use self::SwapBuffersError::*;
         match *self {
-            ContextLost =>
-                "the OpenGL context has been lost and needs to be recreated",
-            AlreadySwapped =>
-                "the buffers have already been swapped",
+            ContextLost => "The OpenGL context has been lost and needs to be recreated",
+            AlreadySwapped => "The buffers have already been swapped",
+            ContextError(_) => "Other context error",
         }
     }
 }
