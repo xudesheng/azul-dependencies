@@ -216,6 +216,46 @@ impl From<IncompatibleOpenGl> for DisplayCreationError {
     }
 }
 
+use glutin::ContextError;
+use std::io;
+
+impl From<ContextError> for SwapBuffersError {
+    #[inline]
+    fn from(err: ContextError) -> SwapBuffersError {
+        match err {
+            ContextError::OsError(s) => SwapBuffersError::OsError(s),
+            ContextError::IoError(e) => SwapBuffersError::IoError(e),
+            ContextError::ContextLost => SwapBuffersError::ContextLost,
+            ContextError::ContextError(e) => SwapBuffersError::ContextError(e),
+        }
+    }
+}
+
+/*
+/// Error that can happen when swapping buffers.
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+pub enum SwapBuffersError {
+    /// The OpenGL context has been lost and needs to be recreated. The `Display` and all the
+    /// objects associated to it (textures, buffers, programs, etc.) need to be recreated from
+    /// scratch.
+    ///
+    /// Operations will have no effect. Functions that read textures, buffers, etc. from OpenGL
+    /// will return uninitialized data instead.
+    ///
+    /// A context loss usually happens on mobile devices when the user puts the application on
+    /// sleep and wakes it up later. However any OpenGL implementation can theoretically lose the
+    /// context at any time. Can only happen if calling `is_context_loss_possible()` returns true.
+    ContextLost,
+    /// Other context error (usually something like EGL_BAD_MATCH).
+    ContextError(u32),
+    /// The buffers have already been swapped.
+    ///
+    /// This error can be returned when `set_finish()` is called multiple times, or `finish()` is
+    /// called after `set_finish()`.
+    AlreadySwapped,
+}
+
+*/
 impl Deref for Display {
     type Target = Context;
     #[inline]
@@ -273,7 +313,7 @@ unsafe impl Backend for GlutinBackend {
     }
 
     #[inline]
-    unsafe fn make_current(&self) {
-        self.borrow().make_current().unwrap();
+    unsafe fn make_current(&self) -> Result<(), SwapBuffersError> {
+        self.borrow().make_current().map_err(|e| e.into())
     }
 }

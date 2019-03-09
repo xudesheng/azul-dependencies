@@ -49,7 +49,7 @@ pub unsafe trait Backend {
     fn is_current(&self) -> bool;
 
     /// Makes the OpenGL context the current context in the current thread.
-    unsafe fn make_current(&self);
+    unsafe fn make_current(&self) -> Result<(), SwapBuffersError>;
 }
 
 unsafe impl<T> Backend for Rc<T> where T: Backend {
@@ -69,8 +69,8 @@ unsafe impl<T> Backend for Rc<T> where T: Backend {
         self.deref().is_current()
     }
 
-    unsafe fn make_current(&self) {
-        self.deref().make_current();
+    unsafe fn make_current(&self) -> Result<(), SwapBuffersError> {
+        self.deref().make_current()
     }
 }
 

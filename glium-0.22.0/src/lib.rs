@@ -1056,9 +1056,15 @@ impl fmt::Display for DrawError {
     }
 }
 
+use std::io;
+
 /// Error that can happen when swapping buffers.
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug)]
 pub enum SwapBuffersError {
+    /// See: glutin::ContextError
+    OsError(String),
+    /// See: glutin::ContextError
+    IoError(io::Error),
     /// The OpenGL context has been lost and needs to be recreated. The `Display` and all the
     /// objects associated to it (textures, buffers, programs, etc.) need to be recreated from
     /// scratch.
@@ -1083,6 +1089,8 @@ impl Error for SwapBuffersError {
     fn description(&self) -> &str {
         use self::SwapBuffersError::*;
         match *self {
+            OsError(ref s) => s,
+            IoError(ref e) => e.description(),
             ContextLost => "The OpenGL context has been lost and needs to be recreated",
             AlreadySwapped => "The buffers have already been swapped",
             ContextError(_) => "Other context error",
