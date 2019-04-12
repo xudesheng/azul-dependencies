@@ -725,7 +725,7 @@ where
 fn open_impl(path: &Path) -> ImageResult<DynamicImage> {
     let fin = match File::open(path) {
         Ok(f) => f,
-        Err(err) => return Err(image::ImageError::IoError(err)),
+        Err(err) => return Err(image::ImageError::Io),
     };
     let fin = BufReader::new(fin);
 
@@ -745,10 +745,7 @@ fn open_impl(path: &Path) -> ImageResult<DynamicImage> {
         "hdr" => image::ImageFormat::HDR,
         "pbm" | "pam" | "ppm" | "pgm" => image::ImageFormat::PNM,
         format => {
-            return Err(image::ImageError::UnsupportedError(format!(
-                "Image format image/{:?} is not supported.",
-                format
-            )))
+            return Err(image::ImageError::GuessFormatError);
         }
     };
 
@@ -843,10 +840,7 @@ pub fn load<R: BufRead + Seek>(r: R, format: ImageFormat) -> ImageResult<Dynamic
         image::ImageFormat::HDR => decoder_to_image(try!(hdr::HDRAdapter::new(BufReader::new(r)))),
         #[cfg(feature = "pnm")]
         image::ImageFormat::PNM => decoder_to_image(try!(pnm::PNMDecoder::new(BufReader::new(r)))),
-        _ => Err(image::ImageError::UnsupportedError(format!(
-            "A decoder for {:?} is not available.",
-            format
-        ))),
+        _ => Err(image::ImageError::UnsupportedError(format)),
     }
 }
 
@@ -896,9 +890,7 @@ pub fn guess_format(buffer: &[u8]) -> ImageResult<ImageFormat> {
             return Ok(format);
         }
     }
-    Err(image::ImageError::UnsupportedError(
-        "Unsupported image format".to_string(),
-    ))
+    Err(image::ImageError::GuessFormatError)
 }
 
 /// Calculates the width and height an image should be resized to.

@@ -32,9 +32,9 @@ impl<R> TIFFDecoder<R>
 impl From<tiff::TiffError> for ImageError {
     fn from(err: tiff::TiffError) -> ImageError {
         match err {
-            tiff::TiffError::IoError(err) => ImageError::IoError(err),
+            tiff::TiffError::IoError(err) => ImageError::Io,
             tiff::TiffError::FormatError(desc) => ImageError::FormatError(desc.to_string()),
-            tiff::TiffError::UnsupportedError(desc) => ImageError::UnsupportedError(desc.to_string()),
+            tiff::TiffError::UnsupportedError(desc) => ImageError::GuessFormatError,
         }
     }
 }

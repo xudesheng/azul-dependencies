@@ -114,8 +114,8 @@ impl From<jpeg_decoder::Error> for ImageError {
         use self::jpeg_decoder::Error::*;
         match err {
             Format(desc) => ImageError::FormatError(desc),
-            Unsupported(desc) => ImageError::UnsupportedError(format!("{:?}", desc)),
-            Io(err) => ImageError::IoError(err),
+            Unsupported(desc) => ImageError::GuessFormatError,
+            Io(err) => ImageError::Io,
             Internal(err) => ImageError::FormatError(err.description().to_owned()),
         }
     }

@@ -153,7 +153,7 @@ trait HeaderReader: BufRead {
     fn read_magic_constant(&mut self) -> ImageResult<[u8; 2]> {
         let mut magic: [u8; 2] = [0, 0];
         self.read_exact(&mut magic)
-            .map_err(ImageError::IoError)?;
+            .map_err(|_| ImageError::Io)?;
         Ok(magic)
     }
 
@@ -193,7 +193,7 @@ trait HeaderReader: BufRead {
         }
 
         if bytes.is_empty() {
-            return Err(ImageError::IoError(io::ErrorKind::UnexpectedEof.into()));
+            return Err(ImageError::Io);
         }
 
         if !bytes.as_slice().is_ascii() {
@@ -212,7 +212,7 @@ trait HeaderReader: BufRead {
     fn read_next_line(&mut self) -> ImageResult<String> {
         let mut buffer = String::new();
         self.read_line(&mut buffer)
-            .map_err(ImageError::IoError)?;
+            .map_err(|_| ImageError::Io)?;
         Ok(buffer)
     }
 
@@ -264,8 +264,8 @@ trait HeaderReader: BufRead {
 
     fn read_arbitrary_header(&mut self) -> ImageResult<ArbitraryHeader> {
         match self.bytes().next() {
-            None => return Err(ImageError::IoError(io::ErrorKind::UnexpectedEof.into())),
-            Some(Err(io)) => return Err(ImageError::IoError(io)),
+            None => return Err(ImageError::Io),
+            Some(Err(io)) => return Err(ImageError::Io),
             Some(Ok(b'\n')) => (),
             Some(Ok(c)) => {
                 return Err(ImageError::FormatError(
@@ -282,7 +282,7 @@ trait HeaderReader: BufRead {
         let mut tupltype: Option<String> = None;
         loop {
             line.truncate(0);
-            self.read_line(&mut line).map_err(ImageError::IoError)?;
+            self.read_line(&mut line).map_err(|_| ImageError::Io)?;
             if line.as_bytes()[0] == b'#' {
                 continue;
             }
@@ -616,7 +616,7 @@ impl Sample for PbmBit {
             .filter_map(|ascii| match ascii {
                 Ok(b'0') => Some(Ok(1)),
                 Ok(b'1') => Some(Ok(0)),
-                Err(err) => Some(Err(ImageError::IoError(err))),
+                Err(err) => Some(Err(ImageError::Io)),
                 Ok(b'\t')
                 | Ok(b'\n')
                 | Ok(b'\x0b')

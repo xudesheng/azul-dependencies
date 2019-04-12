@@ -142,7 +142,7 @@ impl From<png::DecodingError> for ImageError {
     fn from(err: png::DecodingError) -> ImageError {
         use self::png::DecodingError::*;
         match err {
-            IoError(err) => ImageError::IoError(err),
+            IoError(err) => ImageError::Io,
             Format(desc) => ImageError::FormatError(desc.into_owned()),
             InvalidSignature => ImageError::FormatError("invalid signature".into()),
             CrcMismatch { .. } => ImageError::FormatError("CRC error".into()),

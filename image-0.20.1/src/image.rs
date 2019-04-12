@@ -15,7 +15,7 @@ use dynimage::decoder_to_image;
 use pnm::PNMSubtype;
 
 /// An enumeration of Image errors
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ImageError {
     /// The Image is not formatted properly
     FormatError(String),
@@ -24,7 +24,16 @@ pub enum ImageError {
     DimensionError,
 
     /// The Decoder does not support this image format
-    UnsupportedError(String),
+    UnsupportedError(ImageFormat),
+
+    /// Bit depth must be less than ... bits
+    BitDepthError(usize),
+
+    /// Color format not supported. Bit depth: {}, Alpha bits: {}
+    ColorFormatUnsupported(Option<u8>, u8),
+
+    /// Could not guess the image format
+    GuessFormatError,
 
     /// The Decoder does not support this color type
     UnsupportedColor(ColorType),
@@ -33,11 +42,17 @@ pub enum ImageError {
     /// to decode the image
     NotEnoughData,
 
-    /// An I/O Error occurred while decoding the image
-    IoError(io::Error),
+    /// IO error
+    Io,
 
     /// The end of the image has been reached
     ImageEnd,
+}
+
+impl From<io::Error> for ImageError {
+    fn from(_: io::Error) -> Self {
+        ImageError::Io
+    }
 }
 
 impl fmt::Display for ImageError {
@@ -52,7 +67,7 @@ impl fmt::Display for ImageError {
             ImageError::UnsupportedError(ref f) => write!(
                 fmt,
                 "The Decoder does not support the \
-                 image format `{}`",
+                 image format `{:?}`",
                 f
             ),
             ImageError::UnsupportedColor(ref c) => write!(
@@ -61,12 +76,15 @@ impl fmt::Display for ImageError {
                  the color type `{:?}`",
                 c
             ),
+            ImageError::Io => write!(fmt, "IO error"),
+            ImageError::BitDepthError(bd) => write!(fmt, "Bit depth must be less than {}", bd),
+            ImageError::ColorFormatUnsupported(bits, alpha) => write!(fmt, "Color format not supported. Bit depth: {:?}, Alpha bits: {}", bits, alpha),
+            ImageError::GuessFormatError => write!(fmt, "Could not guess the image format"),
             ImageError::NotEnoughData => write!(
                 fmt,
                 "Not enough data was provided to the \
                  Decoder to decode the image"
             ),
-            ImageError::IoError(ref e) => e.fmt(fmt),
             ImageError::ImageEnd => write!(fmt, "The end of the image has been reached"),
         }
     }
@@ -78,24 +96,18 @@ impl Error for ImageError {
             ImageError::FormatError(..) => "Format error",
             ImageError::DimensionError => "Dimension error",
             ImageError::UnsupportedError(..) => "Unsupported error",
+            ImageError::BitDepthError(..) => "Bit depth error",
+            ImageError::ColorFormatUnsupported(..) => "Color format unsupported",
             ImageError::UnsupportedColor(..) => "Unsupported color",
+            ImageError::GuessFormatError => "Unknown image format",
             ImageError::NotEnoughData => "Not enough data",
-            ImageError::IoError(..) => "IO error",
+            ImageError::Io => "Io error",
             ImageError::ImageEnd => "Image end",
         }
     }
 
     fn cause(&self) -> Option<&Error> {
-        match *self {
-            ImageError::IoError(ref e) => Some(e),
-            _ => None,
-        }
-    }
-}
-
-impl From<io::Error> for ImageError {
-    fn from(err: io::Error) -> ImageError {
-        ImageError::IoError(err)
+        None
     }
 }
 
@@ -113,7 +125,7 @@ pub enum DecodingResult {
 
 /// An enumeration of supported image formats.
 /// Not all formats support both encoding and decoding.
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq, PartialOrd, Ord, Hash)]
 pub enum ImageFormat {
     /// An Image in PNG Format
     PNG,
@@ -147,7 +159,7 @@ pub enum ImageFormat {
 }
 
 /// An enumeration of supported image formats for encoding.
-#[derive(Clone, PartialEq, Eq, Debug)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum ImageOutputFormat {
     #[cfg(feature = "png_codec")]
     /// An Image in PNG Format
@@ -176,7 +188,7 @@ pub enum ImageOutputFormat {
     /// A value for signalling an error: An unsupported format was requested
     // Note: When TryFrom is stabilized, this value should not be needed, and
     // a TryInto<ImageOutputFormat> should be used instead of an Into<ImageOutputFormat>.
-    Unsupported(String),
+    Unsupported(ImageFormat),
 }
 
 impl From<ImageFormat> for ImageOutputFormat {
@@ -195,10 +207,7 @@ impl From<ImageFormat> for ImageOutputFormat {
             #[cfg(feature = "bmp")]
             ImageFormat::BMP => ImageOutputFormat::BMP,
 
-            f => ImageOutputFormat::Unsupported(format!(
-                "Image format {:?} not supported for encoding.",
-                f
-            )),
+            f => ImageOutputFormat::Unsupported(f),
         }
     }
 }

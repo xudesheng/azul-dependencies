@@ -29,7 +29,6 @@
 #![no_std]
 
 #![doc(html_root_url = "https://docs.rs/cfg-if")]
-#![deny(missing_docs)]
 #![cfg_attr(test, deny(warnings))]
 
 #[macro_export(local_inner_macros)]

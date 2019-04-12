@@ -278,7 +278,7 @@ impl From<gif::DecodingError> for ImageError {
         use self::gif::DecodingError::*;
         match err {
             Format(desc) | Internal(desc) => ImageError::FormatError(desc.into()),
-            Io(io_err) => ImageError::IoError(io_err),
+            Io(io_err) => ImageError::Io,
         }
     }
 }
