@@ -21,7 +21,7 @@ bitflags = { version = "1.0.4", path = "../bitflags-1.0.4" }
 byteorder = { version = "1.2.7", path = "../byteorder-1.2.7" }
 cfg-if = { version = "0.1.6", path = "../cfg-if-0.1.6" }
 fxhash = { version = "0.2.1", path = "../fxhash-0.2.1" }
-gleam = { version = "0.6.8", path = "../gleam-0.6.8" }
+gleam = { version = "0.6" }
 image = { optional = true, version = "0.20.1", path = "../image-0.20.1" }
 lazy_static = { version = "1.2.0", path = "../lazy_static-1.2.0" }
 log = { version = "0.4.6", path = "../log-0.4.6" }

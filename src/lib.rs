@@ -1,6 +1,5 @@
 #[cfg_attr(feature = "svg", macro_use)]
 pub extern crate glium;
-pub extern crate gleam;
 
 pub extern crate lazy_static;
 pub extern crate euclid;
