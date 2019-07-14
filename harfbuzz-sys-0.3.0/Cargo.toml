@@ -24,8 +24,8 @@ license = "MIT"
 repository = "https://github.com/servo/rust-harfbuzz"
 
 [build-dependencies.cmake]
-version = "0.1.35"
-path = "../cmake-0.1.35"
+version = "0.1.40"
+path = "../cmake-0.1.40"
 
 [build-dependencies.pkg-config]
 version = "0.3.14"
