@@ -57,9 +57,19 @@ impl Context {
         let transparent = wb.window.transparent;
         let window = wb.build(el)?;
 
-        if gl_attr.sharing.is_some() {
-            unimplemented!()
-        }
+        // if gl_attr.sharing.is_some() {
+        //     unimplemented!()
+        // }
+        let share_ctx = match gl_attr.sharing {
+            Some(outer) => {
+                let inner = match outer {
+                    Context::WindowedContext(w) => w.context.clone(),
+                    Context::HeadlessContext(h) => h.context.clone(),
+                };
+                *inner
+            },
+            None => nil,
+        };
 
         match gl_attr.robustness {
             Robustness::RobustNoResetNotification
@@ -75,7 +85,7 @@ impl Context {
         let attributes = helpers::build_nsattributes(pf_reqs, gl_profile)?;
         unsafe {
             let pixel_format = IdRef::new(
-                NSOpenGLPixelFormat::alloc(nil)
+                NSOpenGLPixelFormat::alloc(share_ctx)
                     .initWithAttributes_(&attributes),
             );
             let pixel_format = match pixel_format.non_nil() {
